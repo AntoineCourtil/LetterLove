@@ -1,5 +1,7 @@
 <?php namespace App\Controller;
 
+use App\Controller\GamesController;
+
 class PlayersController extends AppController
 {
 
@@ -67,7 +69,16 @@ class PlayersController extends AppController
             
             $player = $this->Players->patchEntity($player, $this->request->data);
             if($player = $this->Players->findByName($player->name)->first()){
-                echo 'trouvé';
+                //echo 'Player finded';
+                $idGame = GamesController::openedGame();
+                if($idGame!=false){
+                    //GamesController::addPlayer($game);
+                    //echo 'Game finded';
+                    echo "<br/>idGame : ".$idGame;
+                    $this->redirect(array("controller" => "Games", 
+                        "action" => "play",
+                        $idGame));
+                }
             }
         }
     }

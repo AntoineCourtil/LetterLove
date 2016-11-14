@@ -51,11 +51,11 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
     
-    $routes->connect('/', ['controller' => 'Cards', 'action' => 'index']);
-    $routes->connect('/', ['controller' => 'Games', 'action' => 'index']);
-    $routes->connect('/', ['controller' => 'Players', 'action' => 'index']);
-    $routes->connect('/', ['controller' => 'Hands', 'action' => 'index']);
-    $routes->connect('/', ['controller' => 'Piles', 'action' => 'index']);
+    $routes->connect('/cards/', ['controller' => 'Cards', 'action' => 'index']);
+    $routes->connect('/games/', ['controller' => 'Games', 'action' => 'index']);
+    $routes->connect('/players/', ['controller' => 'Players', 'action' => 'index']);
+    $routes->connect('/hands/', ['controller' => 'Hands', 'action' => 'index']);
+    $routes->connect('/piles/', ['controller' => 'Piles', 'action' => 'index']);
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

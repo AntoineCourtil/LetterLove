@@ -9,6 +9,7 @@
         <th>idPlayer</th>
         <th>name</th>
         <th>hand</th>
+        <th>ready ?</th>
         <th>Actions</th>
     </tr>
 
@@ -20,6 +21,9 @@
         </td>
         <td>
             <?= $player->hand ?>
+        </td>
+        <td>
+            <?= $player->ready ?>
         </td>
         <td>
             <?= $this->Form->postLink(

@@ -1,5 +1,6 @@
 <?php namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
 
 class GamesController extends AppController
@@ -53,6 +54,25 @@ class GamesController extends AppController
         }
         
         $this->set(compact('game'));
+    }
+    
+    public static function openedGame(){
+        $games = TableRegistry::get('Games')->find();
+        //$games->find('all');
+        //echo'<br/>a';
+        
+        foreach ($games as $game){
+            //echo'<br/>b';
+            if($game->playing==false){
+                //echo'<br/>c';
+                if($game->player1 == NULL || $game->player2 == NULL || $game->player3 == NULL || $game->player4 == NULL){
+                    echo'<b>'.$game->idGame.'</b>';
+                    return $game->idGame;
+                }
+            }
+        }
+        
+        return false;
     }
     
     public function add()
