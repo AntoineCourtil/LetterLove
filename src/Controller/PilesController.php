@@ -1,0 +1,289 @@
+<?php namespace App\Controller;
+
+use \Cake\ORM\TableRegistry;
+
+class PilesController extends AppController
+{
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Flash'); // Charge le FlashComponent
+    }
+    
+    public function index()
+    {
+         $this->set('piles', $this->Piles->find('all'));
+    }
+
+    public function view($idPile = null)
+    {
+        $pile = $this->Piles->get($idPile);
+        $this->set(compact('pile'));
+    }
+    
+    public static function newDefausse(){
+        
+        $defausse = TableRegistry::get('Piles')->newEntity();
+        $defausse->set('type', 'defausse');
+         
+        if (TableRegistry::get('Piles')->save($defausse)) {
+            //$this->Flash->success(__('Votre pioche a été créee.'));
+            return $defausse;
+        }
+    }
+
+    public static function newPioche()
+    {
+        $pioche = TableRegistry::get('Piles')->newEntity();
+        $pioche->set('type', 'pioche');
+        
+        $tab = [1,1,1,1,1,2,2,3,3,4,4,5,5,6,7,8];
+        
+        shuffle($tab);shuffle($tab);shuffle($tab);
+        
+        $pioche->set('card1', $tab[0]);
+        $pioche->set('card2', $tab[1]);
+        $pioche->set('card3', $tab[2]);
+        $pioche->set('card4', $tab[3]);
+        $pioche->set('card5', $tab[4]);
+        $pioche->set('card6', $tab[5]);
+        $pioche->set('card7', $tab[6]);
+        $pioche->set('card8', $tab[7]);
+        $pioche->set('card9', $tab[8]);
+        $pioche->set('card10', $tab[9]);
+        $pioche->set('card11', $tab[10]);
+        $pioche->set('card12', $tab[11]);
+        $pioche->set('card13', $tab[12]);
+        $pioche->set('card14', $tab[13]);
+        $pioche->set('card15', $tab[14]);
+        $pioche->set('card16', $tab[15]);
+         
+        if (TableRegistry::get('Piles')->save($pioche)) {
+            //$this->Flash->success(__('Votre pioche a été créee.'));
+            return $pioche;
+        }
+        
+    }
+    
+    public static function defausse($defausse, $idCard){
+        if($defausse->get('card1')==NULL){
+            $defausse->set('card1',$idCard);
+        }
+        else if($defausse->get('card2')==NULL){
+            $defausse->set('card2',$idCard);
+        }
+        else if($defausse->get('card3')==NULL){
+            $defausse->set('card3',$idCard);
+        }
+        else if($defausse->get('card4')==NULL){
+            $defausse->set('card4',$idCard);
+        }
+        else if($defausse->get('card5')==NULL){
+            $defausse->set('card5',$idCard);
+        }
+        else if($defausse->get('card6')==NULL){
+            $defausse->set('card6',$idCard);
+        }
+        else if($defausse->get('card7')==NULL){
+            $defausse->set('card7',$idCard);
+        }
+        else if($defausse->get('card8')==NULL){
+            $defausse->set('card8',$idCard);
+        }
+        else if($defausse->get('card9')==NULL){
+            $defausse->set('card9',$idCard);
+        }
+        else if($defausse->get('card10')==NULL){
+            $defausse->set('card10',$idCard);
+        }
+        else if($defausse->get('card11')==NULL){
+            $defausse->set('card11',$idCard);
+        }
+        else if($defausse->get('card12')==NULL){
+            $defausse->set('card12',$idCard);
+        }
+        else if($defausse->get('card13')==NULL){
+            $defausse->set('card13',$idCard);
+        }
+        else if($defausse->get('card14')==NULL){
+            $defausse->set('card14',$idCard);
+        }
+        else if($defausse->get('card15')==NULL){
+            $defausse->set('card15',$idCard);
+        }
+        else if($defausse->get('card16')==NULL){
+            $defausse->set('card16',$idCard);
+        }
+        
+        TableRegistry::get('Piles')->save($defausse);
+    }
+    
+    public static function pioche($pioche){
+        if ($pioche->get('card1')!=NULL){
+            $idCard = $pioche->get('card1');
+            $pioche->set('card1',NULL);
+        }
+        else if($pioche->get('card2')!=NULL){
+            $idCard = $pioche->get('card2');
+            $pioche->set('card2',NULL);
+        }
+        else if($pioche->get('card3')!=NULL){
+            $idCard = $pioche->get('card3');
+            $pioche->set('card3',NULL);
+        }
+        else if($pioche->get('card4')!=NULL){
+            $idCard = $pioche->get('card4');
+            $pioche->set('card4',NULL);
+        }
+        else if($pioche->get('card5')!=NULL){
+            $idCard = $pioche->get('card5');
+            $pioche->set('card5',NULL);
+        }
+        else if($pioche->get('card6')!=NULL){
+            $idCard = $pioche->get('card6');
+            $pioche->set('card6',NULL);
+        }
+        else if($pioche->get('card7')!=NULL){
+            $idCard = $pioche->get('card7');
+            $pioche->set('card7',NULL);
+        }
+        else if($pioche->get('card8')!=NULL){
+            $idCard = $pioche->get('card8');
+            $pioche->set('card8',NULL);
+        }
+        else if($pioche->get('card9')!=NULL){
+            $idCard = $pioche->get('card9');
+            $pioche->set('card9',NULL);
+        }
+        else if($pioche->get('card10')!=NULL){
+            $idCard = $pioche->get('card10');
+            $pioche->set('card10',NULL);
+        }
+        else if($pioche->get('card11')!=NULL){
+            $idCard = $pioche->get('card11');
+            $pioche->set('card11',NULL);
+        }
+        else if($pioche->get('card12')!=NULL){
+            $idCard = $pioche->get('card12');
+            $pioche->set('card12',NULL);
+        }
+        else if($pioche->get('card13')!=NULL){
+            $idCard = $pioche->get('card13');
+            $pioche->set('card13',NULL);
+        }
+        else if($pioche->get('card14')!=NULL){
+            $idCard = $pioche->get('card14');
+            $pioche->set('card14',NULL);
+        }
+        else if($pioche->get('card15')!=NULL){
+            $idCard = $pioche->get('card15');
+            $pioche->set('card15',NULL);
+        }
+        else if($pioche->get('card16')!=NULL){
+            $idCard = $pioche->get('card16');
+            $pioche->set('card16',NULL);
+        }
+        
+        TableRegistry::get('Piles')->save($pioche);
+        
+        return $idCard;
+    }
+    
+    public static function count($idPile){
+        $count=0;
+        
+        $pile = \App\Model\Entity\Pile::get($idPile);
+        
+        if($pile->get('card1')!=NULL){
+            $count++;
+        }
+        if($pile->get('card2')!=NULL){
+            $count++;
+        }
+        if($pile->get('card3')!=NULL){
+            $count++;
+        }
+        if($pile->get('card4')!=NULL){
+            $count++;
+        }
+        if($pile->get('card5')!=NULL){
+            $count++;
+        }
+        if($pile->get('card6')!=NULL){
+            $count++;
+        }
+        if($pile->get('card7')!=NULL){
+            $count++;
+        }
+        if($pile->get('card8')!=NULL){
+            $count++;
+        }
+        if($pile->get('card9')!=NULL){
+            $count++;
+        }
+        if($pile->get('card10')!=NULL){
+            $count++;
+        }
+        if($pile->get('card11')!=NULL){
+            $count++;
+        }
+        if($pile->get('card12')!=NULL){
+            $count++;
+        }
+        if($pile->get('card13')!=NULL){
+            $count++;
+        }
+        if($pile->get('card14')!=NULL){
+            $count++;
+        }
+        if($pile->get('card15')!=NULL){
+            $count++;
+        }
+        if($pile->get('card16')!=NULL){
+            $count++;
+        }
+        
+        return $count;
+    }
+    
+    public function add()
+    {
+        $pile = $this->Piles->newEntity();
+        if ($this->request->is('post')) {
+            $pile = $this->Piles->patchEntity($pile, $this->request->data);
+            if ($this->Piles->save($pile)) {
+                $this->Flash->success(__('Votre Carte a été sauvegardé.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible d\'ajouter votre carte.'));
+        }
+        $this->set('pile', $pile);
+    }
+    
+    public function edit($idPile = null)
+    {
+        $pile = $this->Piles->get($idPile);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Piles->patchEntity($pile, $this->request->data);
+            if ($this->Piles->save($pile)) {
+                $this->Flash->success(__('Votre carte a été mise à jour.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre carte.'));
+        }
+
+        $this->set('pile', $pile);
+    }
+    
+    public function delete($idPile)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $pile = $this->Piles->get($idPile);
+        if ($this->Piles->delete($pile)) {
+            $this->Flash->success(__("La carte avec l'id : {0} a été supprimée.", h($idPile)));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+}
