@@ -75,6 +75,25 @@ class GamesController extends AppController
         return false;
     }
     
+    public static function addPlayer($idGame, $idPlayer){
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if($game->player1 == NULL){
+            $game->player1 = $idPlayer;
+        }
+        else if($game->player2 == NULL){
+            $game->player2 = $idPlayer;
+        }
+        else if($game->player3 == NULL){
+            $game->player3 = $idPlayer;
+        }
+        else if($game->player4 == NULL){
+            $game->player4 = $idPlayer;
+        }
+        
+        TableRegistry::get('Games')->save($game);
+    }
+    
     public function add()
     {
         $game = $this->Games->newEntity();

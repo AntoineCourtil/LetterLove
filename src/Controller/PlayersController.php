@@ -72,8 +72,8 @@ class PlayersController extends AppController
                 //echo 'Player finded';
                 $idGame = GamesController::openedGame();
                 if($idGame!=false){
-                    //GamesController::addPlayer($game);
-                    //echo 'Game finded';
+                    GamesController::addPlayer($idGame, $player->idPlayer);
+                    echo 'idPlayer : '.$player->idPlayer;
                     echo "<br/>idGame : ".$idGame;
                     $this->redirect(array("controller" => "Games", 
                         "action" => "play",
