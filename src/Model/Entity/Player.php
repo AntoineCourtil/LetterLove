@@ -9,6 +9,8 @@ use Cake\ORM\Entity;
  * @property int $idPlayer
  * @property int $hand
  * @property string $name
+ * @property bool $ready
+ * @property bool $connected
  */
 class Player extends Entity
 {

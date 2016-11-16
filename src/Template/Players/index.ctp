@@ -10,6 +10,7 @@
         <th>name</th>
         <th>hand</th>
         <th>ready ?</th>
+        <th>connected ?</th>
         <th>Actions</th>
     </tr>
 
@@ -24,6 +25,9 @@
         </td>
         <td>
             <?= $player->ready ?>
+        </td>
+        <td>
+            <?= $player->connected ?>
         </td>
         <td>
             <?= $this->Form->postLink(

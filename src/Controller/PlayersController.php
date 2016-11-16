@@ -1,5 +1,6 @@
 <?php namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
 
 class PlayersController extends AppController
@@ -70,14 +71,27 @@ class PlayersController extends AppController
             $player = $this->Players->patchEntity($player, $this->request->data);
             if($player = $this->Players->findByName($player->name)->first()){
                 //echo 'Player finded';
-                $idGame = GamesController::openedGame();
-                if($idGame!=false){
-                    GamesController::addPlayer($idGame, $player->idPlayer);
-                    echo 'idPlayer : '.$player->idPlayer;
-                    echo "<br/>idGame : ".$idGame;
-                    $this->redirect(array("controller" => "Games", 
-                        "action" => "play",
-                        $idGame));
+                if($player->connected == false){
+                    $idGame = GamesController::openedGame();
+                    if($idGame!=false){
+                        if(!GamesController::isAlreadyHere($idGame, $player->idPlayer)){
+                                
+//                            $player->connected = true;
+                            if(TableRegistry::get('Players')->save($player)){
+                                GamesController::addPlayer($idGame, $player->idPlayer);
+                                //echo 'idPlayer : '.$player->idPlayer;
+                                $this->redirect(array("controller" => "Games", 
+                                    "action" => "play",
+                                    $idGame));
+                            }
+                            else{
+                                $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+                            }
+                        }
+                        else{
+                            $this->Flash->error(__('Joueur déjà présent dans une partie.'));
+                        }
+                    }
                 }
             }
         }

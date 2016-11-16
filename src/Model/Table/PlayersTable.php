@@ -55,6 +55,16 @@ class PlayersTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
+        $validator
+            ->boolean('ready')
+            ->requirePresence('ready', 'create')
+            ->notEmpty('ready');
+
+        $validator
+            ->boolean('connected')
+            ->requirePresence('connected', 'create')
+            ->notEmpty('connected');
+
         return $validator;
     }
 }

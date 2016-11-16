@@ -66,7 +66,7 @@ class GamesController extends AppController
             if($game->playing==false){
                 //echo'<br/>c';
                 if($game->player1 == NULL || $game->player2 == NULL || $game->player3 == NULL || $game->player4 == NULL){
-                    echo'<b>'.$game->idGame.'</b>';
+                    //echo'<b>'.$game->idGame.'</b>';
                     return $game->idGame;
                 }
             }
@@ -90,8 +90,27 @@ class GamesController extends AppController
         else if($game->player4 == NULL){
             $game->player4 = $idPlayer;
         }
-        
+
         TableRegistry::get('Games')->save($game);
+        
+    }
+    
+    public static function isAlreadyHere($idGame, $idPlayer){
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if($game->player1 == $idPlayer){
+            return true;
+        }
+        if($game->player2 == $idPlayer){
+            return true;
+        }
+        if($game->player3 == $idPlayer){
+            return true;
+        }
+        if($game->player4 == $idPlayer){
+            return true;
+        }
+        return false;
     }
     
     public function add()

@@ -20,6 +20,8 @@ class PlayersFixture extends TestFixture
         'idPlayer' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'hand' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'name' => ['type' => 'string', 'length' => 25, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'ready' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
+        'connected' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         '_indexes' => [
             'fk_hand' => ['type' => 'index', 'columns' => ['hand'], 'length' => []],
         ],
@@ -43,7 +45,9 @@ class PlayersFixture extends TestFixture
         [
             'idPlayer' => 1,
             'hand' => 1,
-            'name' => 'Lorem ipsum dolor sit a'
+            'name' => 'Lorem ipsum dolor sit a',
+            'ready' => 1,
+            'connected' => 1
         ],
     ];
 }
