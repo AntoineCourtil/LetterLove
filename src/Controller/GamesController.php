@@ -3,6 +3,8 @@
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
 
+session_start();
+
 class GamesController extends AppController
 {
 
@@ -22,31 +24,37 @@ class GamesController extends AppController
         $game = $this->Games->get($idGame);
         $this->set(compact('game'));
     }
+    
+    public static function newGame(){
+        $game = TableRegistry::get('Games')->newEntity();
+        $pioche = PilesController::newPioche();
+        $defausse = PilesController::newDefausse();
+
+        $playing = false;
+
+        $game->pioche = $pioche->get('idPile');            
+        $game->defausse = $defausse->get('idPile');
+        $game->playing = $playing;
+
+        $cartePiochee = PilesController::pioche($pioche);
+        echo 'carte piochée : '.$cartePiochee;
+        PilesController::defausse($defausse, $cartePiochee);
+
+        if (TableRegistry::get('Games')->save($game)) {
+            //$this->Flash->success(__('Votre partie a été créee.'));
+            return $game->idGame;
+            //return $this->redirect(['action' => 'play', $game->idGame]);
+        }
+        else{
+            $this->Flash->error(__('Impossible d\'ajouter votre partie.'));
+        }
+    }
 
     public function play($idGame = null)
     {
         if($idGame==null){
-            $game = $this->Games->newEntity();
-            $pioche = PilesController::newPioche();
-            $defausse = PilesController::newDefausse();
-            
-            $playing = false;
-            
-            $game->pioche = $pioche->get('idPile');            
-            $game->defausse = $defausse->get('idPile');
-            $game->playing = $playing;
-            
-            $cartePiochee = PilesController::pioche($pioche);
-            echo 'carte piochée : '.$cartePiochee;
-            PilesController::defausse($defausse, $cartePiochee);
-            
-            if ($this->Games->save($game)) {
-                $this->Flash->success(__('Votre partie a été créee.'));
-                return $this->redirect(['action' => 'play', $game->idGame]);
-            }
-            else{
-                $this->Flash->error(__('Impossible d\'ajouter votre partie.'));
-            }
+            $idGame = newGame();
+            return $this->redirect(['action' => 'play', $idGame]);
         }
         
         else{
@@ -69,10 +77,12 @@ class GamesController extends AppController
                     //echo'<b>'.$game->idGame.'</b>';
                     return $game->idGame;
                 }
-            }
+            } 
         }
         
-        return false;
+        $idGame = GamesController::newGame();
+        
+        return $idGame;
     }
     
     public static function addPlayer($idGame, $idPlayer){

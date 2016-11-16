@@ -67,53 +67,53 @@ class PilesController extends AppController
     }
     
     public static function defausse($defausse, $idCard){
-        if($defausse->get('card1')==NULL){
-            $defausse->set('card1',$idCard);
-        }
-        else if($defausse->get('card2')==NULL){
-            $defausse->set('card2',$idCard);
-        }
-        else if($defausse->get('card3')==NULL){
-            $defausse->set('card3',$idCard);
-        }
-        else if($defausse->get('card4')==NULL){
-            $defausse->set('card4',$idCard);
-        }
-        else if($defausse->get('card5')==NULL){
-            $defausse->set('card5',$idCard);
-        }
-        else if($defausse->get('card6')==NULL){
-            $defausse->set('card6',$idCard);
-        }
-        else if($defausse->get('card7')==NULL){
-            $defausse->set('card7',$idCard);
-        }
-        else if($defausse->get('card8')==NULL){
-            $defausse->set('card8',$idCard);
-        }
-        else if($defausse->get('card9')==NULL){
-            $defausse->set('card9',$idCard);
-        }
-        else if($defausse->get('card10')==NULL){
-            $defausse->set('card10',$idCard);
-        }
-        else if($defausse->get('card11')==NULL){
-            $defausse->set('card11',$idCard);
-        }
-        else if($defausse->get('card12')==NULL){
-            $defausse->set('card12',$idCard);
-        }
-        else if($defausse->get('card13')==NULL){
-            $defausse->set('card13',$idCard);
-        }
-        else if($defausse->get('card14')==NULL){
-            $defausse->set('card14',$idCard);
+        if($defausse->get('card16')==NULL){
+            $defausse->set('card16',$idCard);
         }
         else if($defausse->get('card15')==NULL){
             $defausse->set('card15',$idCard);
         }
-        else if($defausse->get('card16')==NULL){
-            $defausse->set('card16',$idCard);
+        else if($defausse->get('card14')==NULL){
+            $defausse->set('card14',$idCard);
+        }
+        else if($defausse->get('card13')==NULL){
+            $defausse->set('card13',$idCard);
+        }
+        else if($defausse->get('card12')==NULL){
+            $defausse->set('card12',$idCard);
+        }
+        else if($defausse->get('card11')==NULL){
+            $defausse->set('card11',$idCard);
+        }
+        else if($defausse->get('card10')==NULL){
+            $defausse->set('card10',$idCard);
+        }
+        else if($defausse->get('card9')==NULL){
+            $defausse->set('card9',$idCard);
+        }
+        else if($defausse->get('card8')==NULL){
+            $defausse->set('card8',$idCard);
+        }
+        else if($defausse->get('card7')==NULL){
+            $defausse->set('card7',$idCard);
+        }
+        else if($defausse->get('card6')==NULL){
+            $defausse->set('card6',$idCard);
+        }
+        else if($defausse->get('card5')==NULL){
+            $defausse->set('card5',$idCard);
+        }
+        else if($defausse->get('card4')==NULL){
+            $defausse->set('card4',$idCard);
+        }
+        else if($defausse->get('card3')==NULL){
+            $defausse->set('card3',$idCard);
+        }
+        else if($defausse->get('card2')==NULL){
+            $defausse->set('card2',$idCard);
+        }
+        else if($defausse->get('card1')==NULL){
+            $defausse->set('card1',$idCard);
         }
         
         TableRegistry::get('Piles')->save($defausse);
@@ -190,10 +190,120 @@ class PilesController extends AppController
         return $idCard;
     }
     
+    public static function getFirstCard($idPile){
+        $pile = TableRegistry::get('Piles')->get($idPile);
+        
+        if($pile->get('card1')!=NULL){
+            return $pile->get('card1');
+        }
+        if($pile->get('card2')!=NULL){
+            return $pile->get('card2');
+        }
+        if($pile->get('card3')!=NULL){
+            return $pile->get('card3');
+        }
+        if($pile->get('card4')!=NULL){
+            return $pile->get('card4');
+        }
+        if($pile->get('card5')!=NULL){
+            return $pile->get('card5');
+        }
+        if($pile->get('card6')!=NULL){
+            return $pile->get('card6');
+        }
+        if($pile->get('card7')!=NULL){
+            return $pile->get('card7');
+        }
+        if($pile->get('card8')!=NULL){
+            return $pile->get('card8');
+        }
+        if($pile->get('card9')!=NULL){
+            return $pile->get('card9');
+        }
+        if($pile->get('card10')!=NULL){
+            return $pile->get('card10');
+        }
+        if($pile->get('card11')!=NULL){
+            return $pile->get('card11');
+        }
+        if($pile->get('card12')!=NULL){
+            return $pile->get('card12');
+        }
+        if($pile->get('card13')!=NULL){
+            return $pile->get('card13');
+        }
+        if($pile->get('card14')!=NULL){
+            return $pile->get('card14');
+        }
+        if($pile->get('card15')!=NULL){
+            return $pile->get('card15');
+        }
+        if($pile->get('card16')!=NULL){
+            return $pile->get('card16');
+        }
+        
+        return 0;
+    }
+    
+    /*public static function getLastCard($idPile){
+        $pile = TableRegistry::get('Piles')->get($idPile);
+        
+        if($pile->get('card16')!=NULL){
+            return $pile->get('card16');
+        }
+        if($pile->get('card15')!=NULL){
+            return $pile->get('card15');
+        }
+        if($pile->get('card14')!=NULL){
+            return $pile->get('card14');
+        }
+        if($pile->get('card13')!=NULL){
+            return $pile->get('card13');
+        }
+        if($pile->get('card12')!=NULL){
+            return $pile->get('card12');
+        }
+        if($pile->get('card11')!=NULL){
+            return $pile->get('card11');
+        }
+        if($pile->get('card10')!=NULL){
+            return $pile->get('card10');
+        }
+        if($pile->get('card9')!=NULL){
+            return $pile->get('card9');
+        }
+        if($pile->get('card8')!=NULL){
+            return $pile->get('card8');
+        }
+        if($pile->get('card7')!=NULL){
+            return $pile->get('card7');
+        }
+        if($pile->get('card6')!=NULL){
+            return $pile->get('card6');
+        }
+        if($pile->get('card5')!=NULL){
+            return $pile->get('card5');
+        }
+        if($pile->get('card4')!=NULL){
+            return $pile->get('card4');
+        }
+        if($pile->get('card3')!=NULL){
+            return $pile->get('card3');
+        }
+        if($pile->get('card2')!=NULL){
+            return $pile->get('card2');
+        }
+        if($pile->get('card1')!=NULL){
+            return $pile->get('card1');
+        }
+        
+        return 0;
+    }*/
+    
     public static function count($idPile){
         $count=0;
         
-        $pile = \App\Model\Entity\Pile::get($idPile);
+        $pile = TableRegistry::get('Piles')->get($idPile);
         
         if($pile->get('card1')!=NULL){
             $count++;

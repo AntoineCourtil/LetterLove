@@ -3,6 +3,8 @@
 use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
 
+session_start();
+
 class PlayersController extends AppController
 {
 
@@ -73,24 +75,24 @@ class PlayersController extends AppController
                 //echo 'Player finded';
                 if($player->connected == false){
                     $idGame = GamesController::openedGame();
-                    if($idGame!=false){
-                        if(!GamesController::isAlreadyHere($idGame, $player->idPlayer)){
-                                
+                    
+                    if(!GamesController::isAlreadyHere($idGame, $player->idPlayer)){
+
 //                            $player->connected = true;
-                            if(TableRegistry::get('Players')->save($player)){
-                                GamesController::addPlayer($idGame, $player->idPlayer);
-                                //echo 'idPlayer : '.$player->idPlayer;
-                                $this->redirect(array("controller" => "Games", 
-                                    "action" => "play",
-                                    $idGame));
-                            }
-                            else{
-                                $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
-                            }
+                        if(TableRegistry::get('Players')->save($player)){
+                            GamesController::addPlayer($idGame, $player->idPlayer);
+                            $_SESSION['idPlayer'] = $player->idPlayer;
+                            //echo 'idPlayer : '.$player->idPlayer;
+                            $this->redirect(array("controller" => "Games", 
+                                "action" => "play",
+                                $idGame));
                         }
                         else{
-                            $this->Flash->error(__('Joueur déjà présent dans une partie.'));
+                            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
                         }
+                    }
+                    else{
+                        $this->Flash->error(__('Joueur déjà présent dans une partie.'));
                     }
                 }
             }

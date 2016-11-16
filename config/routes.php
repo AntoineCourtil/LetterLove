@@ -49,7 +49,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+    $routes->connect('/', ['controller' => 'Players', 'action' => 'login']);
     
     $routes->connect('/cards/', ['controller' => 'Cards', 'action' => 'index']);
     $routes->connect('/games/', ['controller' => 'Games', 'action' => 'index']);

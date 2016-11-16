@@ -1,14 +1,17 @@
 <!-- File: src/Template/Games/play.ctp -->
 
-<?php use App\Controller\PilesController; ?>
+<?php
+use App\Controller\PilesController; 
+use Cake\ORM\TableRegistry;
+?>
 
 <h1>Jeu LetterLove</h1>
 
 <p>Informations :
     <ul>
-        <li>Partie no : <?= $id = $game->idGame ?></li>
-        <li>Pioche no : <?= $id = $game->pioche ?></li>
-        <li>Defausse no: <?= $id = $game->defausse ?></li>
+        <li>Partie no : <?= $game->idGame ?></li>
+        <li>Pioche no : <?= $game->pioche ?></li>
+        <li>Defausse no: <?= $game->defausse ?></li>
     </ul>
 </p>
 
@@ -21,4 +24,21 @@
     </ul>
 </p>
 
+
+<div>
+    <table>
+        <tr>
+            <td>PIOCHE</td>
+            <td><?php $defausse = TableRegistry::get('Piles')->get($game->defausse);
+                    echo PilesController::getFirstCard($defausse->idPile);
+                ?></td>
+        </tr>
+        <tr>
+            <td><?php $pioche = TableRegistry::get('Piles')->get($game->pioche);
+                    echo PilesController::count($pioche->idPile);
+                ?> cartes restantes</td>
+            <td><?php echo PilesController::count($defausse->idPile); ?> carte défaussées</td>
+        </tr>
+    </table>
+</div>
 
