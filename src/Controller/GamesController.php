@@ -2,6 +2,7 @@
 
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
+session_start();
 
 
 class GamesController extends AppController

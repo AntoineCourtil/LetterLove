@@ -25,9 +25,10 @@ use Cake\ORM\TableRegistry;
     </ul>
 </p>
 
-<button id="pret" onclick="pret()"/>Prêt ?</button>
+<button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)"/>Prêt ?</button>
 <button id="piocher" onclick="piocher()"/>Piocher</button>
 
+<?php echo $this->Url->build(['controller'=>'players','action'=>'ready']);?>
 
 <div>
     <table>
@@ -47,24 +48,16 @@ use Cake\ORM\TableRegistry;
 </div>
 
 <script>
-    function pret(){
-        console.log("pret");
-        /*$.ajax({
-            url: "<?= $this->Url->build(['controller'=>'produits','action'=>'liste'])?>",
-            data: {
-                prix: $("#prix").val()
-            },
-            dataType: 'json',
+    function pret(idPlayer){
+        console.log("pret("+idPlayer+")");
+        $.ajax({
+            url: "<?= $this->Url->build(['controller'=>'players','action'=>'ready/'.$_SESSION['idPlayer']])?>",
             type: 'post',
-            success: function (json) {
-                $("#livres").empty(); // nous vidons le SELECT
-                $("#livres").append('<option value="0"><?=__('Selectionnez un livre')?></option>'); // Nous rajoutons une option "vide" qu SELECT qui indique à l'utilisateur de choisir un livre
-                $.each(json, function (clef, valeur) { // pour chaque élément du tableau JSON, on récupère la clef et la valeur
-                    // on ajoute l'option dans la liste
-                    $("#livres").append('<option value="' + clef + '">' + valeur + '</option>');
-                });
+            dataType:'JSON', 
+            success: function (response) {
+                $("#pret").text(response.reponse);
             }
-        });*/
+        });
     }
     
     function piocher(){

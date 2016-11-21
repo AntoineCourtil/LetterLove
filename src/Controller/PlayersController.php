@@ -4,6 +4,8 @@ use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
 use App\Controller\HandsController;
 
+session_start();
+
 
 class PlayersController extends AppController
 {
@@ -37,6 +39,20 @@ class PlayersController extends AppController
             $this->Flash->error(__('Impossible d\'ajouter votre joueur.'));
         }
         $this->set('player', $player);
+    }
+    
+    public static function ready($idPlayer){
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        
+        $player->ready = true;
+        
+        if (TableRegistry::get('Players')->save($player)) {
+                //$this->Flash->success(__('Votre joueur a été sauvegardé.'));
+                //return $this->redirect(['action' => 'index']);
+                echo json_encode(array("reponse"=>"true"));
+            }
+            //$this->Flash->error(__('Impossible d\'ajouter votre joueur.'));
+                echo json_encode(array("reponse"=>"false"));
     }
     
     public function edit($idPlayer = null)
