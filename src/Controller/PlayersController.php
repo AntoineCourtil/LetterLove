@@ -47,12 +47,15 @@ class PlayersController extends AppController
         $player->ready = true;
         
         if (TableRegistry::get('Players')->save($player)) {
-                //$this->Flash->success(__('Votre joueur a été sauvegardé.'));
-                //return $this->redirect(['action' => 'index']);
-                echo json_encode(array("reponse"=>"true"));
+                $error = true;
+                echo "<script>alert('aaa')</script>";
+                echo $error;
             }
-            //$this->Flash->error(__('Impossible d\'ajouter votre joueur.'));
-                echo json_encode(array("reponse"=>"false"));
+        else{
+                $error = false;
+                echo "<script>alert('bbb')</script>";
+                echo $error;
+        }
     }
     
     public function edit($idPlayer = null)

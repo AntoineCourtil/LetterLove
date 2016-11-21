@@ -25,10 +25,8 @@ use Cake\ORM\TableRegistry;
     </ul>
 </p>
 
-<button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)"/>Prêt ?</button>
+<button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)" value="Piocher"><span id="txtPret">Prêt ?</span></button>
 <button id="piocher" onclick="piocher()"/>Piocher</button>
-
-<?php echo $this->Url->build(['controller'=>'players','action'=>'ready']);?>
 
 <div>
     <table>
@@ -49,13 +47,15 @@ use Cake\ORM\TableRegistry;
 
 <script>
     function pret(idPlayer){
-        console.log("pret("+idPlayer+")");
         $.ajax({
-            url: "<?= $this->Url->build(['controller'=>'players','action'=>'ready/'.$_SESSION['idPlayer']])?>",
+            url: "<?= $this->Url->build(['controller'=>'players','action'=>'ready/'])?>/"+idPlayer,
             type: 'post',
             dataType:'JSON', 
             success: function (response) {
-                $("#pret").text(response.reponse);
+                $("#txtPret").text('Vous êtes prêt');
+            }, 
+            error: function (response) {
+                $("#txtPret").text('Déjà prêt');
             }
         });
     }
