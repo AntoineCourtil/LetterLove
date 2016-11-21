@@ -50,6 +50,10 @@ class PlayersController extends AppController
                 $error = true;
                 echo "<script>alert('aaa')</script>";
                 echo $error;
+                
+                $idGame = $_SESSION['idGame'];
+                
+                GamesController::checkPlaying($idGame);
             }
         else{
                 $error = false;
@@ -106,6 +110,7 @@ class PlayersController extends AppController
                             
                             $_SESSION['idPlayer'] = $player->idPlayer;
                             $_SESSION['idHand'] = $idHand;
+                            $_SESSION['idGame'] = $idGame;
                             
                             
                             

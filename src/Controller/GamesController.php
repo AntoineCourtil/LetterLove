@@ -25,6 +25,29 @@ class GamesController extends AppController
         $this->set(compact('game'));
     }
     
+    public static function checkPlaying($idGame){
+        if(GamesController::checkPlayersReady($idGame)){
+            $game = TableRegistry::get('Games')->get($idGame);
+            $game->playing = true;
+            TableRegistry::get('Games')->save($game);
+        }
+    }
+    
+    public static function checkPlayersReady($idGame){
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if(TableRegistry::get('Players')->get($game->player1)->ready == true){
+            if(TableRegistry::get('Players')->get($game->player2)->ready == true){
+                if($game->player3 == NULL || TableRegistry::get('Players')->get($game->player3)->ready == true){
+                    if($game->player4 == NULL || TableRegistry::get('Players')->get($game->player4)->ready == true){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     public static function newGame(){
         $game = TableRegistry::get('Games')->newEntity();
         $pioche = PilesController::newPioche();
