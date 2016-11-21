@@ -9,6 +9,7 @@
         <th>idPlayer</th>
         <th>name</th>
         <th>hand</th>
+        <th>defausse</th>
         <th>ready ?</th>
         <th>connected ?</th>
         <th>Actions</th>
@@ -22,6 +23,9 @@
         </td>
         <td>
             <?= $player->hand ?>
+        </td>
+        <td>
+            <?= $player->defausse ?>
         </td>
         <td>
             <?= $player->ready ?>

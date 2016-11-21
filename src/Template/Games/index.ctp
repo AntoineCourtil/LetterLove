@@ -13,6 +13,7 @@
         <th>player4</th>
         <th>pioche</th>
         <th>defausse</th>
+        <th>carte defaussée</th>
         <th>playing ?</th>
         <th>Actions</th>
     </tr>
@@ -37,6 +38,9 @@
         </td>
         <td>
             <?= $game->defausse ?>
+        </td>
+        <td>
+            <?= $game->carteDefaussee ?>
         </td>
         <td>
             <?= $game->playing ?>

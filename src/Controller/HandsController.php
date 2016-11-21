@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+
 class HandsController extends AppController
 {
 
@@ -19,6 +21,20 @@ class HandsController extends AppController
     {
         $hand = $this->Hands->get($idHand);
         $this->set(compact('hand'));
+    }
+    
+    public static function newHand($idPlayer)
+    {
+        $hand = TableRegistry::get('Hands')->newEntity();
+        
+        $hand->idPlayer = $idPlayer;
+        
+        if (TableRegistry::get('Hands')->save($hand)) {
+            return $hand->idHand;
+        }
+        else{
+            //$this->Flash->error(__('Impossible d\'ajouter votre main.'));
+        }
     }
     
     public function add()

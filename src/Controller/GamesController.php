@@ -3,7 +3,6 @@
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
 
-session_start();
 
 class GamesController extends AppController
 {
@@ -38,7 +37,10 @@ class GamesController extends AppController
 
         $cartePiochee = PilesController::pioche($pioche);
         echo 'carte piochée : '.$cartePiochee;
-        PilesController::defausse($defausse, $cartePiochee);
+        
+        $game->carteDefaussee = $cartePiochee;
+        
+        //PilesController::defausse($defausse, $cartePiochee);
 
         if (TableRegistry::get('Games')->save($game)) {
             //$this->Flash->success(__('Votre partie a été créee.'));

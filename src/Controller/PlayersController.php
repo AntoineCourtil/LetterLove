@@ -2,8 +2,8 @@
 
 use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
+use App\Controller\HandsController;
 
-session_start();
 
 class PlayersController extends AppController
 {
@@ -81,8 +81,15 @@ class PlayersController extends AppController
 //                            $player->connected = true;
                         if(TableRegistry::get('Players')->save($player)){
                             GamesController::addPlayer($idGame, $player->idPlayer);
-                            $_SESSION['idPlayer'] = $player->idPlayer;
                             //echo 'idPlayer : '.$player->idPlayer;
+                            
+                            $idHand = HandsController::newHand($player->idPlayer);
+                            
+                            $_SESSION['idPlayer'] = $player->idPlayer;
+                            $_SESSION['idHand'] = $idHand;
+                            
+                            
+                            
                             $this->redirect(array("controller" => "Games", 
                                 "action" => "play",
                                 $idGame));

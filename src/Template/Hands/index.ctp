@@ -6,7 +6,8 @@
 
 <table>
     <tr>
-        <th>IdHand</th>
+        <th>idHand</th>
+        <th>idPlayer</th>
         <th>Card1</th>
         <th>Card2</th>
         <th>Actions</th>
@@ -17,6 +18,9 @@
     <?php foreach ($hands as $hand): ?>
     <tr>
         <td><?= $hand->idHand ?></td>
+        <td>
+            <?= $hand->idPlayer ?>
+        </td>
         <td>
             <?= $hand->card1 ?>
         </td>

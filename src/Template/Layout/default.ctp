@@ -14,6 +14,7 @@
  */
 
 $cakeDescription = 'CakePHP: the rapid development php framework';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,12 +27,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <link href="../../../webroot/css/cake.css" rel="stylesheet" type="text/css"/>
+    <link href="../../../webroot/css/base.css" rel="stylesheet" type="text/css"/>
+    <script src="../../../webroot/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
