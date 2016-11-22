@@ -144,10 +144,16 @@ use Cake\ORM\TableRegistry;
                 var card2 = res['card2'];
 
                 if(card1!=null){
-                    $("#card1").html('<img src="../../../webroot/img/'+card1+'.jpg" alt=""/>');
+                    $("#card1").html('<a onclick="defausse('+idPlayer+', 1)"><img src="../../../webroot/img/'+card1+'.jpg" alt=""/></a>');
+                }
+                else{
+                    $("#card1").html('');
                 }
                 if(card2!=null){
-                    $("#card2").html('<img src="../../../webroot/img/'+card2+'.jpg" alt=""/>');
+                    $("#card2").html('<a onclick="defausse('+idPlayer+', 2)"><img src="../../../webroot/img/'+card2+'.jpg" alt=""/></a>');
+                }
+                else{
+                    $("#card2").html('');
                 }
             }
         );
@@ -184,6 +190,22 @@ use Cake\ORM\TableRegistry;
                 }
                 
                 $("#listDefausse").html(liste);
+                
+                //console.log(data);
+                
+                
+            });
+    }
+    
+    function defausse(idPlayer, idCard){
+        $.post("<?= $this->Url->build(['controller'=>'players','action'=>'defaussecard'])?>", { idPlayer: idPlayer, posCard: idCard})
+            
+            .done(function(data){
+                
+                
+                //var res = jQuery.parseJSON(data);
+                
+                
                 
                 //console.log(data);
                 

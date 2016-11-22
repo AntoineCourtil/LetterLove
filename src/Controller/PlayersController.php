@@ -3,6 +3,7 @@
 use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
 use App\Controller\HandsController;
+use App\Controller\PilesController;
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -63,20 +64,48 @@ class PlayersController extends AppController
         echo json_encode($data);
     }
     
-    public function edit($idPlayer = null)
-    {
-        $player = $this->Players->get($idPlayer);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Players->patchEntity($player, $this->request->data);
-            if ($this->Players->save($player)) {
-                $this->Flash->success(__('Votre joueur a été mis à jour.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+    public static function defaussecard(){
+        if(isset($_POST['idPlayer']) && $_POST['posCard']){
+            $idPlayer=$_POST['idPlayer'];
+            $posCard=$_POST['posCard'];
         }
-
-        $this->set('player', $player);
+        
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        $hand = TableRegistry::get('Hands')->get($player->hand);
+        $defausse = TableRegistry::get('Piles')->get($player->defausse);
+        
+        if($posCard=="1" || $posCard==1){
+            PilesController::defausse($defausse, $hand->card1);
+            $hand->card1=null;
+            
+        }
+        else{
+            PilesController::defausse($defausse, $hand->card2);
+            $hand->card2=null;
+        }
+        
+        TableRegistry::get('Hands')->save($hand);
+        TableRegistry::get('Piles')->save($defausse);
+        
+        $data = array();
+        $data['response']="success";
+        
+        echo json_encode($data);
     }
+
+        public function edit($idPlayer = null){
+            $player = $this->Players->get($idPlayer);
+            if ($this->request->is(['post', 'put'])) {
+                $this->Players->patchEntity($player, $this->request->data);
+                if ($this->Players->save($player)) {
+                    $this->Flash->success(__('Votre joueur a été mis à jour.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+            }
+
+            $this->set('player', $player);
+        }
     
     public function delete($idPlayer)
     {
