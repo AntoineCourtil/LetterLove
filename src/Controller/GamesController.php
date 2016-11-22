@@ -2,6 +2,7 @@
 
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
+use App\Controller\HandsController;
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -37,8 +38,15 @@ class GamesController extends AppController
         }
     }
     
-    public static function refresh($idGame){
+    public static function refresh(){
+        $idGame=$_POST['idGame'];
+        $idPlayer=$_POST['idPlayer'];
+        
         $game = TableRegistry::get('Games')->get($idGame);
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        $hand = TableRegistry::get('Hands')->get($player->hand);
+        $pioche = TableRegistry::get('Piles')->get($game->pioche);
+        $defausse = TableRegistry::get('Piles')->get($game->defausse);
         
         $data = array();
         
@@ -49,7 +57,44 @@ class GamesController extends AppController
         $data['player3'] = $game->player3;
         $data['player4'] = $game->player4;
         
+        $data['carteRestantes'] = PilesController::count($pioche->idPile);
+        $data['carteDefaussees'] = PilesController::count($defausse->idPile);
+        
+        if(GamesController::checkPlayersReady($idGame)){
+            $data['gameReady']=true;
+        }
+        else{
+            $data['gameReady']=false;            
+        }
+        
+        $data['card1'] = $hand->card1;
+        $data['card2'] = $hand->card2;
+        
         echo json_encode($data);
+    }
+    
+    public static function piocher(){
+        $idGame=$_POST['idGame'];
+        $idPlayer=$_POST['idPlayer'];
+        
+        $game = TableRegistry::get('Games')->get($idGame);
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        $pioche = TableRegistry::get('Piles')->get($game->pioche);
+        $hand = TableRegistry::get('Hands')->get($player->hand);        
+        $idCard = PilesController::pioche($pioche);
+        
+        
+        HandsController::addCard($hand->idHand, $idCard);
+        
+        $data = array();
+        
+        $data['status'] = 'success';
+        $data['card'] = $idCard;
+        $data['hand'] = $hand->idHand;
+        
+        echo json_encode($data);
+        
+        
     }
 
 

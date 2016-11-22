@@ -16,14 +16,13 @@ use Cake\ORM\TableRegistry;
     </ul>
 </p>
 
-<p>Joueurs : 
-    <span id="listePlayers"/>
+<p><span id="gameReady"></span> 
+    <span id="listePlayers"></span>
 </p>
 
 <p>A qui le tour ? <span id="turn"/></p>
 
-<button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)" value="Piocher"><span id="txtPret">Prêt ?</span></button>
-<button id="piocher" onclick="piocher(<?php echo $_SESSION['idPlayer'];?>)"/>Piocher</button>
+<button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)" value="Pret"><span id="txtPret">Prêt ?</span></button>
 
 <div>
     <table>
@@ -35,30 +34,45 @@ use Cake\ORM\TableRegistry;
             <td>Carte défaussée au début</td>
         </tr>
         <tr>
-            <td><?php $pioche = TableRegistry::get('Piles')->get($game->pioche);
-                    echo PilesController::count($pioche->idPile); 
-                ?> cartes restantes</td>
-            <td><?php echo PilesController::count($defausse->idPile); ?> carte défaussées</td>
+            <td><span id="carteRestantes"></span> cartes restantes</td>
+            <td><span id="carteDefaussees"></span> carte défaussées</td>
             <td><?= $game->carteDefaussee ?></td>
+        </tr>
+    </table>
+    
+    <table>
+        <tr>
+            <th colspan="2">Votre Main : Cliquer pour défausser</th>
+        </tr>
+        <tr>
+            <td><span id="card1"></span></td>
+            <td><span id="card2"></span></td>
         </tr>
     </table>
 </div>
 
 <script>
     myTurn = false;
+    pioche = false;
     
     function pret(idPlayer){
         $.post("<?= $this->Url->build(['controller'=>'players','action'=>'ready/'])?>/"+idPlayer, function(data){
-            //var res = jQuery.parseJSON(data);
-            //console.log(data);
-            
             $("#txtPret").text('Vous êtes prêt');
         });
     }
     
-    function piocher(idPlayer){
+    function piocher(idGame, idPlayer){
+        
         if(myTurn){
-            console.log("piocher");
+            //console.log("piocher");
+            
+            $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
+            
+                .done(function(data){
+                    console.log(data);
+                });
+            
+            pioche=true;
         }
         else{
             console.log("pas votre tour");
@@ -74,26 +88,68 @@ use Cake\ORM\TableRegistry;
         
         console.log('refresh');
         
-        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'refresh/'])?>/"+idGame, function(data){
-            var res = jQuery.parseJSON(data);
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'refresh'])?>", { idGame: idGame, idPlayer: idPlayer})
             
-            //------------------------------------------------------------------------------------------
-            
-            turnPlayer = res['turnPlayer'];
-            
-            $("#turn").html("Joueur <b>"+res['turnPlayer']+"</b>");
-            
-            if(idPlayer==turnPlayer){
-                myTurn=true;
+            .done(function(data){
+                var res = jQuery.parseJSON(data);
+
+
+                //------------------------------------------------------------------------------------------
+
+
+                turnPlayer = res['turnPlayer'];
+
+                $("#turn").html("Joueur <b>"+res['turnPlayer']+"</b>");
+
+                if(idPlayer==turnPlayer){
+                    myTurn=true;
+                }
+                else{
+                    myTurn=false;
+                    pioche=false;
+                }
+
+
+                //--------------------------------------------------------------------------------------------
+                
+                if(!pioche){
+                    piocher(idGame, idPlayer);
+                    pioche=true;
+                }
+                
+                //--------------------------------------------------------------------------------------------
+
+                
+                $("#carteRestantes").html(res['carteRestantes']);
+                $("#carteDefaussees").html(res['carteDefaussees']);
+                
+                
+                //--------------------------------------------------------------------------------------------
+
+                
+                if(res['gameReady']){
+                    $("#gameReady").html("Tous les Joueurs sont prêts:");
+                }
+                else{
+                    $("#gameReady").html("Joueurs :");
+                }
+                
+                $("#listePlayers").html("<ul><li>"+res['player1']+"</li><li>"+res['player2']+"</li><li>"+res['player3']+"</li><li>"+res['player4']+"</li></ul>");
+                
+                
+
+
+                //--------------------------------------------------------------------------------------------
+
+
+                var card1= res['card1'];
+                var card2= res['card2'];
+
+
+                $("#card1").text(card1);
+                $("#card2").text(card2);
             }
-            else{
-                myTurn=false;
-            }
-            
-            //--------------------------------------------------------------------------------------------
-            
-            $("#listePlayers").html("<ul><li>"+res['player1']+"</li><li>"+res['player2']+"</li><li>"+res['player3']+"</li><li>"+res['player4']+"</li></ul>");
-        });
+        );
     }
 
     setInterval(refresh, 1000); // Répète la fonction toutes les 1 sec

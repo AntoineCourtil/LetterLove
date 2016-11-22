@@ -100,6 +100,12 @@ class PlayersController extends AppController
                 if($player->connected == false){
                     $idGame = GamesController::openedGame();
                     
+                    $idHand = HandsController::newHand($player->idPlayer);
+                    $player->hand = $idHand;
+                    
+                    $defausse = PilesController::newDefausse();
+                    $player->defausse = $defausse->idPile;
+                    
                     if(!GamesController::isAlreadyHere($idGame, $player->idPlayer)){
 
 //                            $player->connected = true;
@@ -107,7 +113,6 @@ class PlayersController extends AppController
                             GamesController::addPlayer($idGame, $player->idPlayer);
                             //echo 'idPlayer : '.$player->idPlayer;
                             
-                            $idHand = HandsController::newHand($player->idPlayer);
                             
                             $_SESSION['idPlayer'] = $player->idPlayer;
                             $_SESSION['idHand'] = $idHand;
