@@ -14,6 +14,7 @@
         <th>pioche</th>
         <th>defausse</th>
         <th>carte defaussée</th>
+        <th>tour joueur</th>
         <th>playing ?</th>
         <th>Actions</th>
     </tr>
@@ -41,6 +42,9 @@
         </td>
         <td>
             <?= $game->carteDefaussee ?>
+        </td>
+        <td>
+            <?= $game->tourPlayer ?>
         </td>
         <td>
             <?= $game->playing ?>

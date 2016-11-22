@@ -10,6 +10,7 @@
     echo $this->Form->input('pioche');
     echo $this->Form->input('defausse');
     echo $this->Form->input('carteDefaussee');
+    echo $this->Form->input('tourPlayer');
     echo $this->Form->input('playing');
     echo $this->Form->button(__("Sauvegarder la partie"));
     echo $this->Form->end();

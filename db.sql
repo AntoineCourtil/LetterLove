@@ -56,6 +56,8 @@ CREATE TABLE `games` (
   `playing` tinyint(1) NOT NULL,
   `player3` int(11) DEFAULT NULL,
   `player4` int(11) DEFAULT NULL,
+  `carteDefaussee` int(11) NOT NULL,
+  `tourPlayer` int(11) DEFAULT NULL,
   PRIMARY KEY (`idGame`),
   KEY `party_fk_player1` (`player1`),
   KEY `party_fk_player2` (`player2`),
@@ -63,13 +65,17 @@ CREATE TABLE `games` (
   KEY `party_fk_defausse` (`defausse`),
   KEY `party_fk_player3` (`player3`),
   KEY `party_fk_player4` (`player4`),
+  KEY `party_fk_carteDefaussee` (`carteDefaussee`),
+  KEY `party_fk_tourPlayer` (`tourPlayer`),
+  CONSTRAINT `party_fk_carteDefaussee` FOREIGN KEY (`carteDefaussee`) REFERENCES `cards` (`id`),
   CONSTRAINT `party_fk_defausse` FOREIGN KEY (`defausse`) REFERENCES `piles` (`idPile`),
   CONSTRAINT `party_fk_pioche` FOREIGN KEY (`pioche`) REFERENCES `piles` (`idPile`),
   CONSTRAINT `party_fk_player1` FOREIGN KEY (`player1`) REFERENCES `players` (`idPlayer`),
   CONSTRAINT `party_fk_player2` FOREIGN KEY (`player2`) REFERENCES `players` (`idPlayer`),
   CONSTRAINT `party_fk_player3` FOREIGN KEY (`player3`) REFERENCES `players` (`idPlayer`),
-  CONSTRAINT `party_fk_player4` FOREIGN KEY (`player4`) REFERENCES `players` (`idPlayer`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+  CONSTRAINT `party_fk_player4` FOREIGN KEY (`player4`) REFERENCES `players` (`idPlayer`),
+  CONSTRAINT `party_fk_tourPlayer` FOREIGN KEY (`tourPlayer`) REFERENCES `players` (`idPlayer`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,6 +84,7 @@ CREATE TABLE `games` (
 
 LOCK TABLES `games` WRITE;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
+INSERT INTO `games` VALUES (37,2,3,25,26,1,4,NULL,3,2),(38,5,2,27,28,1,NULL,NULL,2,NULL);
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,12 +99,15 @@ CREATE TABLE `hands` (
   `idHand` int(11) NOT NULL AUTO_INCREMENT,
   `card1` int(11) DEFAULT NULL,
   `card2` int(11) DEFAULT NULL,
+  `idPlayer` int(11) NOT NULL,
   PRIMARY KEY (`idHand`),
   KEY `fk_card1` (`card1`),
   KEY `fk_card2` (`card2`),
+  KEY `fk_idPlayer` (`idPlayer`),
   CONSTRAINT `fk_card1` FOREIGN KEY (`card1`) REFERENCES `cards` (`id`),
-  CONSTRAINT `fk_card2` FOREIGN KEY (`card2`) REFERENCES `cards` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  CONSTRAINT `fk_card2` FOREIGN KEY (`card2`) REFERENCES `cards` (`id`),
+  CONSTRAINT `fk_idPlayer` FOREIGN KEY (`idPlayer`) REFERENCES `players` (`idPlayer`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +116,7 @@ CREATE TABLE `hands` (
 
 LOCK TABLES `hands` WRITE;
 /*!40000 ALTER TABLE `hands` DISABLE KEYS */;
-INSERT INTO `hands` VALUES (1,1,5);
+INSERT INTO `hands` VALUES (11,NULL,NULL,2),(12,NULL,NULL,3),(13,NULL,NULL,4),(14,NULL,NULL,5),(15,NULL,NULL,2);
 /*!40000 ALTER TABLE `hands` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +179,7 @@ CREATE TABLE `piles` (
   CONSTRAINT `pile_fk_card7` FOREIGN KEY (`card7`) REFERENCES `cards` (`id`),
   CONSTRAINT `pile_fk_card8` FOREIGN KEY (`card8`) REFERENCES `cards` (`id`),
   CONSTRAINT `pile_fk_card9` FOREIGN KEY (`card9`) REFERENCES `cards` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +188,7 @@ CREATE TABLE `piles` (
 
 LOCK TABLES `piles` WRITE;
 /*!40000 ALTER TABLE `piles` DISABLE KEYS */;
-INSERT INTO `piles` VALUES (26,NULL,2,1,7,2,6,8,5,1,4,1,3,1,1,4,5,'pioche'),(27,3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(28,NULL,1,2,3,1,4,7,6,8,1,4,5,2,1,3,5,'pioche'),(29,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(30,NULL,1,8,2,3,3,7,1,1,5,4,1,1,6,4,2,'pioche'),(31,5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(32,NULL,4,2,6,1,7,4,1,3,5,1,3,2,1,5,8,'pioche'),(33,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(34,NULL,5,3,4,3,2,1,1,4,5,2,1,1,7,6,1,'pioche'),(35,8,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(36,NULL,1,6,3,4,1,4,1,5,1,2,3,2,8,1,5,'pioche'),(37,7,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(38,NULL,1,1,1,8,1,3,4,6,5,2,3,2,7,5,4,'pioche'),(39,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(40,NULL,2,5,1,8,1,2,3,6,7,1,1,5,4,4,3,'pioche'),(41,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(42,NULL,1,3,2,1,4,5,4,5,6,7,2,8,1,3,1,'pioche'),(43,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(44,NULL,4,8,7,4,2,3,1,1,3,1,5,6,1,1,2,'pioche'),(45,5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(46,NULL,1,2,7,8,3,4,1,6,3,1,5,1,4,5,2,'pioche'),(47,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse');
+INSERT INTO `piles` VALUES (1,NULL,1,3,5,1,6,1,3,8,2,4,1,4,5,7,1,'pioche'),(2,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(3,NULL,7,8,1,1,2,4,1,1,5,4,3,2,3,1,5,'pioche'),(4,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(5,NULL,8,2,7,5,4,1,3,3,5,1,4,1,1,6,1,'pioche'),(6,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(7,NULL,3,8,5,5,1,6,2,1,1,4,2,4,7,1,1,'pioche'),(8,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,3,'defausse'),(9,NULL,1,6,5,1,3,8,2,4,4,1,3,2,5,1,7,'pioche'),(10,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'defausse'),(11,NULL,1,4,1,2,4,7,8,1,6,3,1,5,3,1,2,'pioche'),(12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,5,'defausse'),(13,NULL,2,6,4,4,7,1,5,2,1,3,1,1,5,1,3,'pioche'),(14,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,'defausse'),(15,NULL,4,1,5,6,1,2,8,3,2,7,3,4,5,1,1,'pioche'),(16,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'defausse'),(17,NULL,1,4,2,8,5,7,1,1,4,6,3,1,1,2,3,'pioche'),(18,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,5,'defausse'),(19,NULL,5,4,1,2,5,1,2,1,6,3,8,1,4,7,3,'pioche'),(20,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(21,NULL,2,2,1,4,3,6,1,1,7,8,1,1,4,3,5,'pioche'),(22,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(23,NULL,8,7,5,6,1,3,4,1,1,3,5,2,4,2,1,'pioche'),(24,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(25,NULL,4,5,4,2,1,3,1,5,1,8,7,1,2,1,6,'pioche'),(26,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse'),(27,NULL,1,4,3,5,4,3,1,7,8,1,1,6,1,5,2,'pioche'),(28,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'defausse');
 /*!40000 ALTER TABLE `piles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,10 +205,13 @@ CREATE TABLE `players` (
   `name` varchar(25) NOT NULL,
   `ready` tinyint(1) NOT NULL DEFAULT '0',
   `connected` tinyint(1) NOT NULL DEFAULT '0',
+  `defausse` int(11) DEFAULT NULL,
   PRIMARY KEY (`idPlayer`),
   KEY `fk_hand` (`hand`),
-  CONSTRAINT `fk_hand` FOREIGN KEY (`hand`) REFERENCES `hands` (`idHand`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  KEY `player_fk_defausse` (`defausse`),
+  CONSTRAINT `fk_hand` FOREIGN KEY (`hand`) REFERENCES `hands` (`idHand`),
+  CONSTRAINT `player_fk_defausse` FOREIGN KEY (`defausse`) REFERENCES `piles` (`idPile`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +220,7 @@ CREATE TABLE `players` (
 
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
-INSERT INTO `players` VALUES (2,NULL,'moi',0,0),(3,NULL,'lui',0,0);
+INSERT INTO `players` VALUES (2,NULL,'moi',1,0,NULL),(3,NULL,'lui',1,0,NULL),(4,NULL,'elle',1,0,NULL),(5,NULL,'toi',1,0,NULL);
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -220,4 +233,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-16 15:00:59
+-- Dump completed on 2016-11-21 20:33:46

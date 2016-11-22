@@ -2,8 +2,10 @@
 
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
-session_start();
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 class GamesController extends AppController
 {
@@ -24,15 +26,33 @@ class GamesController extends AppController
         $game = $this->Games->get($idGame);
         $this->set(compact('game'));
     }
-    
+
+
     public static function checkPlaying($idGame){
         if(GamesController::checkPlayersReady($idGame)){
             $game = TableRegistry::get('Games')->get($idGame);
             $game->playing = true;
+            $game->turnPlayer = $game->player1;
             TableRegistry::get('Games')->save($game);
         }
     }
     
+    public static function refresh($idGame){
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        $data = array();
+        
+        $data['status'] = 'success';
+        $data['turnPlayer'] = $game->tourPlayer;
+        $data['player1'] = $game->player1;
+        $data['player2'] = $game->player2;
+        $data['player3'] = $game->player3;
+        $data['player4'] = $game->player4;
+        
+        echo json_encode($data);
+    }
+
+
     public static function checkPlayersReady($idGame){
         $game = TableRegistry::get('Games')->get($idGame);
         

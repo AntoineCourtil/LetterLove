@@ -4,7 +4,9 @@ use Cake\ORM\TableRegistry;
 use App\Controller\GamesController;
 use App\Controller\HandsController;
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 
 class PlayersController extends AppController
@@ -45,21 +47,20 @@ class PlayersController extends AppController
         $player = TableRegistry::get('Players')->get($idPlayer);
         
         $player->ready = true;
+        $data = array();
         
         if (TableRegistry::get('Players')->save($player)) {
-                $error = true;
-                echo "<script>alert('aaa')</script>";
-                echo $error;
+                $data['status']='success';
                 
                 $idGame = $_SESSION['idGame'];
                 
                 GamesController::checkPlaying($idGame);
             }
         else{
-                $error = false;
-                echo "<script>alert('bbb')</script>";
-                echo $error;
+                $data['status']='error';
         }
+        
+        echo json_encode($data);
     }
     
     public function edit($idPlayer = null)

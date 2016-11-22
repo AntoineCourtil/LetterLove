@@ -8,5 +8,6 @@
 <p>pioche : <?= h($party->pioche) ?></p>
 <p>defausse : <?= h($party->defausse) ?></p>
 <p>defausse : <?= h($party->carteDefaussee) ?></p>
+<p>defausse : <?= h($party->tourPlayer) ?></p>
 <p>playing ? : <?= h($party->playing) ?></p>
 <p><small>idParty : <?= h($party->idParty) ?></small></p>
