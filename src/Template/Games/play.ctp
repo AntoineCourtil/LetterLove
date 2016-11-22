@@ -27,16 +27,14 @@ use Cake\ORM\TableRegistry;
 <div>
     <table>
         <tr>
-            <td>PIOCHE</td>
+            <td><span id="carteRestantes"></span> cartes restantes</td>
+            <td><span id="carteDefaussees"></span> carte défaussées</td>
+        </tr>
+        <tr>
+            <td><img src="../../../webroot/img/Dos.jpg" alt=""/></td>
             <td><?php $defausse = TableRegistry::get('Piles')->get($game->defausse);
                     echo PilesController::getFirstCard($defausse->idPile);
                 ?></td>
-            <td>Carte défaussée au début</td>
-        </tr>
-        <tr>
-            <td><span id="carteRestantes"></span> cartes restantes</td>
-            <td><span id="carteDefaussees"></span> carte défaussées</td>
-            <td><?= $game->carteDefaussee ?></td>
         </tr>
     </table>
     
@@ -142,12 +140,15 @@ use Cake\ORM\TableRegistry;
                 //--------------------------------------------------------------------------------------------
 
 
-                var card1= res['card1'];
-                var card2= res['card2'];
+                var card1 = res['card1'];
+                var card2 = res['card2'];
 
-
-                $("#card1").text(card1);
-                $("#card2").text(card2);
+                if(card1!=null){
+                    $("#card1").html('<img src="../../../webroot/img/'+card1+'.jpg" alt=""/>');
+                }
+                if(card2!=null){
+                    $("#card2").html('<img src="../../../webroot/img/'+card2+'.jpg" alt=""/>');
+                }
             }
         );
     }
