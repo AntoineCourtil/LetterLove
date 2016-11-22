@@ -27,20 +27,60 @@ class GamesController extends AppController
         $game = $this->Games->get($idGame);
         $this->set(compact('game'));
     }
-
+    
+    public static function firstTour($game){
+        
+        GamesController::piocher($game->idGame, $game->player1);
+        GamesController::piocher($game->idGame, $game->player2);
+        
+        if($game->player3 != null){
+            GamesController::piocher($game->idGame, $game->player3);
+        }
+        if($game->player4 != null){
+            GamesController::piocher($game->idGame, $game->player4);
+        }
+    }
 
     public static function checkPlaying($idGame){
-        if(GamesController::checkPlayersReady($idGame)){
-            $game = TableRegistry::get('Games')->get($idGame);
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if(GamesController::checkPlayersReady($idGame) && $game->playing==false){
             $game->playing = true;
-            $game->turnPlayer = $game->player1;
+            $game->tourPlayer = $game->player1;
+            
+            GamesController::firstTour($game);
+            
             TableRegistry::get('Games')->save($game);
+            
+            return true;
         }
+    }
+    
+    public static function nbPlayers($game){
+        $res = 0;
+        
+        if($game->player1 != null){
+            $res++;
+        }
+        if($game->player2 != null){
+            $res++;
+        }
+        if($game->player3 != null){
+            $res++;
+        }
+        if($game->player4 != null){
+            $res++;
+        }
+        
+        return $res;
     }
     
     public static function refresh(){
         $idGame=$_POST['idGame'];
         $idPlayer=$_POST['idPlayer'];
+        
+        /*$idGame = 38;
+        $idPlayer = 2;*/
         
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);
@@ -60,8 +100,18 @@ class GamesController extends AppController
         $data['carteRestantes'] = PilesController::count($pioche->idPile);
         $data['carteDefaussees'] = PilesController::count($defausse->idPile);
         
-        if(GamesController::checkPlayersReady($idGame)){
+        if(GamesController::checkPlaying($idGame) && ($game->player3 == null && $game->player4 == null)){
             $data['gameReady']=true;
+            if(GamesController::nbPlayers($game) && PilesController::count($game->defausse)==0){
+                $idCard2 = PilesController::pioche($pioche);
+                PilesController::defausse($defausse, $idCard2);
+                
+                $idCard2 = PilesController::pioche($pioche);
+                PilesController::defausse($defausse, $idCard2);
+                
+                $idCard2 = PilesController::pioche($pioche);
+                PilesController::defausse($defausse, $idCard2);
+            }
         }
         else{
             $data['gameReady']=false;            
@@ -73,9 +123,11 @@ class GamesController extends AppController
         echo json_encode($data);
     }
     
-    public static function piocher(){
-        $idGame=$_POST['idGame'];
-        $idPlayer=$_POST['idPlayer'];
+    public static function piocher($idGame, $idPlayer){
+        if(isset($_POST['idGame']) && $_POST['idPlayer']){
+            $idGame=$_POST['idGame'];
+            $idPlayer=$_POST['idPlayer'];
+        }
         
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);
@@ -102,7 +154,10 @@ class GamesController extends AppController
         $game = TableRegistry::get('Games')->get($idGame);
         
         if(TableRegistry::get('Players')->get($game->player1)->ready == true){
-            if(TableRegistry::get('Players')->get($game->player2)->ready == true){
+            if($game->player2 == NULL){
+                return false;
+            }
+            elseif(TableRegistry::get('Players')->get($game->player2)->ready == true){
                 if($game->player3 == NULL || TableRegistry::get('Players')->get($game->player3)->ready == true){
                     if($game->player4 == NULL || TableRegistry::get('Players')->get($game->player4)->ready == true){
                         return true;
@@ -175,8 +230,8 @@ class GamesController extends AppController
         
         return $idGame;
     }
-    
-    public static function addPlayer($idGame, $idPlayer){
+
+        public static function addPlayer($idGame, $idPlayer){
         $game = TableRegistry::get('Games')->get($idGame);
         
         if($game->player1 == NULL){

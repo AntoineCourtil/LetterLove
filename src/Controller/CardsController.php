@@ -1,5 +1,7 @@
 <?php namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+
 class CardsController extends AppController
 {
 
@@ -34,7 +36,29 @@ class CardsController extends AppController
         $this->set('card', $card);
     }
     
-    public function edit($id = null)
+    public static function nameOfCard($idCard){
+        
+        $card = TableRegistry::get('Cards')->get($idCard);
+        
+        return $card->title;
+        
+    }
+    
+    public static function nameof(){
+        $idCard = $_POST['idCard'];
+        
+        $card = TableRegistry::get('Cards')->get($idCard);
+        
+        $data = array();
+        
+        $data['status'] = 'success';
+        $data['name'] = $card->title;
+        
+        echo json_encode($data);
+        
+    }
+
+        public function edit($id = null)
     {
         $card = $this->Cards->get($id);
         if ($this->request->is(['post', 'put'])) {

@@ -32,9 +32,7 @@ use Cake\ORM\TableRegistry;
         </tr>
         <tr>
             <td><img src="../../../webroot/img/Dos.jpg" alt=""/></td>
-            <td><?php $defausse = TableRegistry::get('Piles')->get($game->defausse);
-                    echo PilesController::getFirstCard($defausse->idPile);
-                ?></td>
+            <td><span id="listDefausse"></span></td>
         </tr>
     </table>
     
@@ -62,12 +60,12 @@ use Cake\ORM\TableRegistry;
     function piocher(idGame, idPlayer){
         
         if(myTurn){
-            //console.log("piocher");
+            console.log("piocher");
             
             $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
             
                 .done(function(data){
-                    console.log(data);
+                    //console.log(data);
                 });
             
             pioche=true;
@@ -112,7 +110,6 @@ use Cake\ORM\TableRegistry;
                 
                 if(!pioche){
                     piocher(idGame, idPlayer);
-                    pioche=true;
                 }
                 
                 //--------------------------------------------------------------------------------------------
@@ -120,6 +117,9 @@ use Cake\ORM\TableRegistry;
                 
                 $("#carteRestantes").html(res['carteRestantes']);
                 $("#carteDefaussees").html(res['carteDefaussees']);
+                
+                listDefausse();
+                
                 
                 
                 //--------------------------------------------------------------------------------------------
@@ -151,6 +151,44 @@ use Cake\ORM\TableRegistry;
                 }
             }
         );
+    }
+    
+    function nameOfCard(idCard){
+        $.post("<?= $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>", { idCard: idCard})
+            
+            .done(function(data){
+                var res = jQuery.parseJSON(data);
+                
+                var name = "";
+                name = res['name'];
+                
+                return 'name';
+                
+                
+            });
+    }
+    
+    function listDefausse(){
+        $.post("<?= $this->Url->build(['controller'=>'piles','action'=>'listpile'])?>", { idPile: <?= $game->defausse?>})
+            
+            .done(function(data){
+                var res = jQuery.parseJSON(data);
+                
+                var liste ="<ul>";
+                
+                for(var i=1;i<17;i++){
+                    if(res['card'+i]!="null"){
+                        
+                        liste = liste + "<li><b>"+i+"</b> : "+res['card'+i]+"</li>";
+                    }
+                }
+                
+                $("#listDefausse").html(liste);
+                
+                //console.log(data);
+                
+                
+            });
     }
 
     setInterval(refresh, 1000); // Répète la fonction toutes les 1 sec
