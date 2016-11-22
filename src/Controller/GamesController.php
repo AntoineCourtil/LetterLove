@@ -132,17 +132,25 @@ class GamesController extends AppController
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);
         $pioche = TableRegistry::get('Piles')->get($game->pioche);
-        $hand = TableRegistry::get('Hands')->get($player->hand);        
-        $idCard = PilesController::pioche($pioche);
+        $hand = TableRegistry::get('Hands')->get($player->hand);     
         
         
-        HandsController::addCard($hand->idHand, $idCard);
+        if(HandsController::nbcards($hand)<2){
+           
+            $idCard = PilesController::pioche($pioche);
+            HandsController::addCard($hand->idHand, $idCard);
+
+            $data = array();
+
+            $data['status'] = 'success';
+            $data['card'] = $idCard;
+            $data['hand'] = $hand->idHand;
         
-        $data = array();
+        }
         
-        $data['status'] = 'success';
-        $data['card'] = $idCard;
-        $data['hand'] = $hand->idHand;
+        else{
+            $data['status'] = 'error';
+        }
         
         echo json_encode($data);
         

@@ -23,6 +23,19 @@ class HandsController extends AppController
         $this->set(compact('hand'));
     }
     
+    public static function nbcards($hand){
+        $res = 0;
+        
+        if($hand->card1 != null){
+            $res++;
+        }
+        if($hand->card2 != null){
+            $res++;
+        }
+        
+        return $res;
+    }
+
     public static function addCard($idHand,$idCard){
         $hand = TableRegistry::get('Hands')->get($idHand);
         
