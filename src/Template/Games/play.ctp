@@ -57,12 +57,13 @@ use Cake\ORM\TableRegistry;
         });
     }
     
-    function piocher(idGame, idPlayer){
+    function piocher(){
         
         if(myTurn){
             console.log("piocher");
             
-            $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
+            //$.post("<?php // $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
+            $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>")
             
                 .done(function(data){
                     //console.log(data);
@@ -78,13 +79,13 @@ use Cake\ORM\TableRegistry;
     
     function refresh() {
         
-        var idGame = <?php echo $_SESSION['idGame'];?>;
         var idPlayer = <?php echo $_SESSION['idPlayer'];?>;
         var turnPlayer = -1;
         
         console.log('refresh');
         
-        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'refresh'])?>", { idGame: idGame, idPlayer: idPlayer})
+        //$.post("<?php // $this->Url->build(['controller'=>'games','action'=>'refresh'])?>", { idGame: idGame, idPlayer: idPlayer})
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'refresh'])?>")
             
             .done(function(data){
                 var res = jQuery.parseJSON(data);
@@ -109,7 +110,7 @@ use Cake\ORM\TableRegistry;
                 //--------------------------------------------------------------------------------------------
                 
                 if(!pioche){
-                    piocher(idGame, idPlayer);
+                    piocher();
                 }
                 
                 //--------------------------------------------------------------------------------------------
@@ -144,13 +145,13 @@ use Cake\ORM\TableRegistry;
                 var card2 = res['card2'];
 
                 if(card1!=null){
-                    $("#card1").html('<a onclick="defausse('+idPlayer+', 1)"><img src="../../../webroot/img/'+card1+'.jpg" alt=""/></a>');
+                    $("#card1").html('<a onclick="defausse(1)"><img src="../../../webroot/img/'+card1+'.jpg" alt=""/></a>');
                 }
                 else{
                     $("#card1").html('');
                 }
                 if(card2!=null){
-                    $("#card2").html('<a onclick="defausse('+idPlayer+', 2)"><img src="../../../webroot/img/'+card2+'.jpg" alt=""/></a>');
+                    $("#card2").html('<a onclick="defausse(2)"><img src="../../../webroot/img/'+card2+'.jpg" alt=""/></a>');
                 }
                 else{
                     $("#card2").html('');
@@ -159,8 +160,9 @@ use Cake\ORM\TableRegistry;
         );
     }
     
-    function nameOfCard(idCard){
-        $.post("<?= $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>", { idCard: idCard})
+    function nameOfCard(){
+        //$.post("<?php // $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>", { idCard: idCard})
+        $.post("<?= $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>")
             
             .done(function(data){
                 var res = jQuery.parseJSON(data);
@@ -175,7 +177,8 @@ use Cake\ORM\TableRegistry;
     }
     
     function listDefausse(){
-        $.post("<?= $this->Url->build(['controller'=>'piles','action'=>'listpile'])?>", { idPile: <?= $game->defausse?>})
+        //$.post("<?php // $this->Url->build(['controller'=>'piles','action'=>'listpile'])?>", { idPile: <?php // $game->defausse?>})
+        $.post("<?= $this->Url->build(['controller'=>'piles','action'=>'listpile'])?>")
             
             .done(function(data){
                 var res = jQuery.parseJSON(data);
@@ -197,8 +200,8 @@ use Cake\ORM\TableRegistry;
             });
     }
     
-    function defausse(idPlayer, idCard){
-        $.post("<?= $this->Url->build(['controller'=>'players','action'=>'defaussecard'])?>", { idPlayer: idPlayer, posCard: idCard})
+    function defausse(posCard){
+        $.post("<?= $this->Url->build(['controller'=>'players','action'=>'defaussecard'])?>", { /*idPlayer: idPlayer, */posCard: posCard})
             
             .done(function(data){
                 

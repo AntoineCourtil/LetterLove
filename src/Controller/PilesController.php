@@ -3,6 +3,10 @@
 use \Cake\ORM\TableRegistry;
 use App\Controller\CardsController;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 class PilesController extends AppController
 {
 
@@ -26,7 +30,11 @@ class PilesController extends AppController
     
     
     public static function listpile(){
-        $idPile = $_POST['idPile'];
+        $idGame = $_SESSION['idGame'];
+        
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        $idPile = $game->defausse;
         
         $pile = TableRegistry::get('Piles')->get($idPile);
         

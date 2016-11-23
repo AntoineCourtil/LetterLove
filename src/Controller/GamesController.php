@@ -76,8 +76,8 @@ class GamesController extends AppController
     }
     
     public static function refresh(){
-        $idGame=$_POST['idGame'];
-        $idPlayer=$_POST['idPlayer'];
+        $idGame=$_SESSION['idGame'];
+        $idPlayer=$_SESSION['idPlayer'];
         
         /*$idGame = 38;
         $idPlayer = 2;*/
@@ -123,11 +123,10 @@ class GamesController extends AppController
         echo json_encode($data);
     }
     
-    public static function piocher($idGame, $idPlayer){
-        if(isset($_POST['idGame']) && $_POST['idPlayer']){
-            $idGame=$_POST['idGame'];
-            $idPlayer=$_POST['idPlayer'];
-        }
+    public static function piocher(){
+        
+        $idGame=$_SESSION['idGame'];
+        $idPlayer=$_SESSION['idPlayer'];
         
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);

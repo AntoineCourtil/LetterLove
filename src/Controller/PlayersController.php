@@ -65,11 +65,10 @@ class PlayersController extends AppController
     }
     
     public static function defaussecard(){
-        if(isset($_POST['idPlayer']) && $_POST['posCard']){
-            $idPlayer=$_POST['idPlayer'];
-            $posCard=$_POST['posCard'];
-        }
-        
+
+        $idPlayer=$_SESSION['idPlayer'];
+        $posCard=$_POST['posCard'];
+
         $player = TableRegistry::get('Players')->get($idPlayer);
         $hand = TableRegistry::get('Hands')->get($player->hand);
         $defausse = TableRegistry::get('Piles')->get($player->defausse);

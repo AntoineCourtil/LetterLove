@@ -45,7 +45,7 @@ class CardsController extends AppController
     }
     
     public static function nameof(){
-        $idCard = $_POST['idCard'];
+        $idCard = $_SESSION['idCard'];
         
         $card = TableRegistry::get('Cards')->get($idCard);
         
