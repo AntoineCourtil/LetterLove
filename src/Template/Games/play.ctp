@@ -24,6 +24,8 @@ use Cake\ORM\TableRegistry;
 
 <button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)" value="Pret"><span id="txtPret">Prêt ?</span></button>
 
+<span id="endGame"></span>
+
 <div>
     <table>
         <tr>
@@ -43,6 +45,23 @@ use Cake\ORM\TableRegistry;
         <tr>
             <td><span id="card1"></span></td>
             <td><span id="card2"></span></td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <table>
+        <tr>
+            <th>Defausse Player 1</th>
+            <th>Defausse Player 2</th>
+            <th>Defausse Player 3</th>
+            <th>Defausse Player 4</th>
+        </tr>
+        <tr>
+            <td><span id="listDefausseP1"></span></td>
+            <td><span id="listDefausseP2"></span></td>
+            <td><span id="listDefausseP3"></span></td>
+            <td><span id="listDefausseP4"></span></td>
         </tr>
     </table>
 </div>
@@ -120,6 +139,10 @@ use Cake\ORM\TableRegistry;
                 $("#carteDefaussees").html(res['carteDefaussees']);
                 
                 listDefausse();
+                listDefausseP(1);
+                listDefausseP(2);
+                listDefausseP(3);
+                listDefausseP(4);
                 
                 
                 
@@ -135,8 +158,13 @@ use Cake\ORM\TableRegistry;
                 
                 $("#listePlayers").html("<ul><li>"+res['player1']+"</li><li>"+res['player2']+"</li><li>"+res['player3']+"</li><li>"+res['player4']+"</li></ul>");
                 
-                
 
+                //--------------------------------------------------------------------------------------------
+
+                
+                if(res['endGame']){
+                    $("#endGame").html("<h2>Fin du Jeu ! Merci d'avoir joué !</h2>");
+                }
 
                 //--------------------------------------------------------------------------------------------
 
@@ -193,6 +221,30 @@ use Cake\ORM\TableRegistry;
                 }
                 
                 $("#listDefausse").html(liste);
+                
+                //console.log(data);
+                
+                
+            });
+    }
+    
+    function listDefausseP(player){
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'listdefaussep'])?>", {id: player})
+            .done(function(data){
+                var res = jQuery.parseJSON(data);
+                
+                console.log(player);
+                
+                var liste ="<ul>";
+                
+                for(var i=1;i<17;i++){
+                    if(res['card'+i]!="null"){
+                        
+                        liste = liste + "<li><b>"+i+"</b> : "+res['card'+i]+"</li>";
+                    }
+                }
+                
+                $("#listDefausseP"+player).html(liste);
                 
                 //console.log(data);
                 

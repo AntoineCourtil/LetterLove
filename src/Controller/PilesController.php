@@ -113,6 +113,85 @@ class PilesController extends AppController
         
     }
     
+    public static function listpile2($idPile){
+        
+        $pile = TableRegistry::get('Piles')->get($idPile);
+        
+        $data = array();
+        
+        $data['card1']="null";
+        $data['card2']="null";
+        $data['card3']="null";
+        $data['card4']="null";
+        $data['card5']="null";
+        $data['card6']="null";
+        $data['card7']="null";
+        $data['card8']="null";
+        $data['card9']="null";
+        $data['card10']="null";
+        $data['card11']="null";
+        $data['card12']="null";
+        $data['card13']="null";
+        $data['card14']="null";
+        $data['card15']="null";
+        $data['card16']="null";
+        
+        if($pile->card1 != null){
+            $data['card1'] =  CardsController::nameOfCard($pile->card1);
+        }
+        if($pile->card2 != null){
+            $data['card2'] = CardsController::nameOfCard($pile->card2);
+        }
+        if($pile->card3 != null){
+            $data['card3'] = CardsController::nameOfCard($pile->card3);
+        }
+        if($pile->card4 != null){
+            $data['card4'] = CardsController::nameOfCard($pile->card4);
+        }
+        if($pile->card5 != null){
+            $data['card5'] = CardsController::nameOfCard($pile->card5);
+        }
+        if($pile->card6 != null){
+            $data['card6'] = CardsController::nameOfCard($pile->card6);
+        }
+        if($pile->card7 != null){
+            $data['card7'] = CardsController::nameOfCard($pile->card7);
+        }
+        if($pile->card8 != null){
+            $data['card8'] = CardsController::nameOfCard($pile->card8);
+        }
+        if($pile->card9 != null){
+            $data['card1'] = CardsController::nameOfCard($pile->card9);
+        }
+        if($pile->card10 != null){
+            $data['card10'] = CardsController::nameOfCard($pile->card10);
+        }
+        if($pile->card11 != null){
+            $data['card11'] = CardsController::nameOfCard($pile->card11);
+        }
+        if($pile->card12 != null){
+            $data['card12'] = CardsController::nameOfCard($pile->card12);
+        }
+        if($pile->card13 != null){
+            $data['card13'] = CardsController::nameOfCard($pile->card13);
+        }
+        if($pile->card14 != null){
+            $data['card14'] = CardsController::nameOfCard($pile->card14);
+        }
+        if($pile->card15 != null){
+            $data['card15'] = CardsController::nameOfCard($pile->card15);
+        }
+        if($pile->card16 != null){
+            $data['card16'] = CardsController::nameOfCard($pile->card16);
+        }
+        
+        
+        $data['status'] = 'success';
+        
+        echo json_encode($data);
+        
+    }
+    
     public static function newDefausse(){
         
         $defausse = TableRegistry::get('Piles')->newEntity();

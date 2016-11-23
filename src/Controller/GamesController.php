@@ -117,12 +117,34 @@ class GamesController extends AppController
             $data['gameReady']=false;            
         }
         
+        if(GamesController::checkEndGame($game)){
+            $data['endGame'] = true;
+        }
+        else{
+            $data['endGame'] = false;
+        }
+        
         $data['card1'] = $hand->card1;
         $data['card2'] = $hand->card2;
         
         echo json_encode($data);
     }
     
+    public static function checkEndGame($game){
+        
+        $idPile = $game->pioche;
+        
+        if(PilesController::count($idPile) > 0){
+            return false;
+        }
+        else{
+            $game->finished = true;
+            return true;
+        }
+        
+        TableRegistry::get('Games')->save($game);
+    }
+
     public static function piocher($idGame, $idPlayer){
         
         if(!isset($idGame) && !isset($idPlayer)){
@@ -288,10 +310,20 @@ class GamesController extends AppController
             $game->tourPlayer = $game->player2;
         }
         if($actualPlayer == $game->player2){
-            $game->tourPlayer = $game->player3;
+            if($game->player3 != null){
+                $game->tourPlayer = $game->player3;
+            }
+            else{
+                $game->tourPlayer = $game->player1;
+            }
         }
         if($actualPlayer == $game->player3){
-            $game->tourPlayer = $game->player4;
+            if($game->player4 != null){
+                $game->tourPlayer = $game->player4;
+            }
+            else{
+                $game->tourPlayer = $game->player1;
+            }
         }
         if($actualPlayer == $game->player4){
             $game->tourPlayer = $game->player1;
@@ -300,9 +332,50 @@ class GamesController extends AppController
         TableRegistry::get('Games')->save($game);
         
     }
+    
+    public static function listdefaussep(){
+        $idGame = $_SESSION['idGame'];
+        $id = $_POST['id'];
+        
+        $idPlayer=-1;
+        
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if($id==1){
+            $idPlayer = $game->player1;
+        }
+        if($id==2){
+            $idPlayer = $game->player2;
+        }
+        if($id==3 && $game->player3!=null){
+            $idPlayer = $game->player3;
+        }
+        if($id==4 && $game->player4!=null){
+            $idPlayer = $game->player4;
+        }
+        
+        if($idPlayer == -1){
+            $data = array();
+            $data['status'] = 'error';
 
+            echo json_encode($data);
+            
+        }
+        else{
+            $player = TableRegistry::get('Players')->get($idPlayer);
+            $idDefausse = $player->defausse;
 
-    public function add()
+            PilesController::listpile2($idDefausse);
+        }
+        /*$data = array();
+        $data['status'] = 'success';
+        
+        echo json_encode($data);*/
+        
+        
+    }
+
+        public function add()
     {
         $game = $this->Games->newEntity();
         if ($this->request->is('post')) {
