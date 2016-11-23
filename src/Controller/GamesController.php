@@ -123,10 +123,12 @@ class GamesController extends AppController
         echo json_encode($data);
     }
     
-    public static function piocher(){
+    public static function piocher($idGame, $idPlayer){
         
-        $idGame=$_SESSION['idGame'];
-        $idPlayer=$_SESSION['idPlayer'];
+        if(!isset($idGame) && !isset($idPlayer)){
+            $idGame=$_SESSION['idGame'];
+            $idPlayer=$_SESSION['idPlayer'];
+        }
         
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);
@@ -276,6 +278,30 @@ class GamesController extends AppController
         return false;
     }
     
+    public static function nextPlayer($idGame){
+        
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        $actualPlayer = $game->tourPlayer;
+        
+        if($actualPlayer == $game->player1){
+            $game->tourPlayer = $game->player2;
+        }
+        if($actualPlayer == $game->player2){
+            $game->tourPlayer = $game->player3;
+        }
+        if($actualPlayer == $game->player3){
+            $game->tourPlayer = $game->player4;
+        }
+        if($actualPlayer == $game->player4){
+            $game->tourPlayer = $game->player1;
+        }
+        
+        TableRegistry::get('Games')->save($game);
+        
+    }
+
+
     public function add()
     {
         $game = $this->Games->newEntity();

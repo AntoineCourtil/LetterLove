@@ -67,27 +67,40 @@ class PlayersController extends AppController
     public static function defaussecard(){
 
         $idPlayer=$_SESSION['idPlayer'];
+        $idGame=$_SESSION['idGame'];
         $posCard=$_POST['posCard'];
 
         $player = TableRegistry::get('Players')->get($idPlayer);
         $hand = TableRegistry::get('Hands')->get($player->hand);
         $defausse = TableRegistry::get('Piles')->get($player->defausse);
+        $game = TableRegistry::get('Games')->get($idGame);
         
-        if($posCard=="1" || $posCard==1){
-            PilesController::defausse($defausse, $hand->card1);
-            $hand->card1=null;
-            
-        }
-        else{
-            PilesController::defausse($defausse, $hand->card2);
-            $hand->card2=null;
-        }
-        
-        TableRegistry::get('Hands')->save($hand);
-        TableRegistry::get('Piles')->save($defausse);
+        $nbCards = HandsController::nbcards($hand);
         
         $data = array();
-        $data['response']="success";
+        
+        if($game->tourPlayer == $idPlayer && $nbCards>1){
+        
+            if($posCard=="1" || $posCard==1){
+                PilesController::defausse($defausse, $hand->card1);
+                $hand->card1=null;
+
+            }
+            else{
+                PilesController::defausse($defausse, $hand->card2);
+                $hand->card2=null;
+            }
+
+            TableRegistry::get('Hands')->save($hand);
+            TableRegistry::get('Piles')->save($defausse);
+            
+            GamesController::nextPlayer($idGame);
+            
+            $data['response']="success";
+        
+        }
+        
+        $data['response']="error";
         
         echo json_encode($data);
     }
