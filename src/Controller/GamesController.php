@@ -139,6 +139,7 @@ class GamesController extends AppController
         }
         else{
             $game->finished = true;
+            TableRegistry::get('Games')->save($game);
             return true;
         }
         
@@ -229,9 +230,17 @@ class GamesController extends AppController
 
     public function play($idGame = null)
     {
+        if(!isset($_SESSION['idPlayer'])){
+            //echo $_SESSION['idPlayer'];
+            return $this->redirect(array("controller" => "Players", 
+                            "action" => "login"));
+        }
+        
         if($idGame==null){
-            $idGame = newGame();
-            return $this->redirect(['action' => 'play', $idGame]);
+            //$idGame = newGame();
+            //return $this->redirect(['action' => 'play', $idGame]);
+            return $this->redirect(array("controller" => "Players", 
+                            "action" => "login"));
         }
         
         else{
@@ -239,6 +248,26 @@ class GamesController extends AppController
         }
         
         $this->set(compact('game'));
+    }
+
+    public static function addPlayer($idGame, $idPlayer){
+        $game = TableRegistry::get('Games')->get($idGame);
+        
+        if($game->player1 == NULL){
+            $game->player1 = $idPlayer;
+        }
+        else if($game->player2 == NULL){
+            $game->player2 = $idPlayer;
+        }
+        else if($game->player3 == NULL){
+            $game->player3 = $idPlayer;
+        }
+        else if($game->player4 == NULL){
+            $game->player4 = $idPlayer;
+        }
+
+        TableRegistry::get('Games')->save($game);
+        
     }
     
     public static function openedGame(){
@@ -261,43 +290,32 @@ class GamesController extends AppController
         
         return $idGame;
     }
-
-        public static function addPlayer($idGame, $idPlayer){
-        $game = TableRegistry::get('Games')->get($idGame);
-        
-        if($game->player1 == NULL){
-            $game->player1 = $idPlayer;
-        }
-        else if($game->player2 == NULL){
-            $game->player2 = $idPlayer;
-        }
-        else if($game->player3 == NULL){
-            $game->player3 = $idPlayer;
-        }
-        else if($game->player4 == NULL){
-            $game->player4 = $idPlayer;
-        }
-
-        TableRegistry::get('Games')->save($game);
-        
-    }
     
-    public static function isAlreadyHere($idGame, $idPlayer){
-        $game = TableRegistry::get('Games')->get($idGame);
+    public static function isAlreadyPlaying($idPlayer){
         
-        if($game->player1 == $idPlayer){
-            return true;
+        $games = TableRegistry::get('Games')->find();
+        
+        $idGame = -1;
+        
+        foreach ($games as $game){
+            
+            if(!$game->finished){
+                if($game->player1 == $idPlayer){
+                    return $game->idGame;
+                }
+                if($game->player2 == $idPlayer){
+                    return $game->idGame;
+                }
+                if($game->player3 == $idPlayer){
+                    return $game->idGame;
+                }
+                if($game->player4 == $idPlayer){
+                    return $game->idGame;
+                }
+            }
         }
-        if($game->player2 == $idPlayer){
-            return true;
-        }
-        if($game->player3 == $idPlayer){
-            return true;
-        }
-        if($game->player4 == $idPlayer){
-            return true;
-        }
-        return false;
+        
+        return $idGame;
     }
     
     public static function nextPlayer($idGame){
@@ -344,7 +362,7 @@ class GamesController extends AppController
         if($id==1){
             $idPlayer = $game->player1;
         }
-        if($id==2){
+        if($id==2 && $game->player2!=null){
             $idPlayer = $game->player2;
         }
         if($id==3 && $game->player3!=null){

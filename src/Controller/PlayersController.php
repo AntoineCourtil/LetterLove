@@ -138,40 +138,51 @@ class PlayersController extends AppController
             $player = $this->Players->patchEntity($player, $this->request->data);
             if($player = $this->Players->findByName($player->name)->first()){
                 //echo 'Player finded';
-                if($player->connected == false){
+                
+                $idGame = -1;
+                $idGame = GamesController::isAlreadyPlaying($player->idPlayer);
+
+                if($idGame == -1){
                     $idGame = GamesController::openedGame();
                     
                     $idHand = HandsController::newHand($player->idPlayer);
                     $player->hand = $idHand;
-                    
+
                     $defausse = PilesController::newDefausse();
                     $player->defausse = $defausse->idPile;
-                    
-                    if(!GamesController::isAlreadyHere($idGame, $player->idPlayer)){
 
-//                            $player->connected = true;
-                        if(TableRegistry::get('Players')->save($player)){
-                            GamesController::addPlayer($idGame, $player->idPlayer);
-                            //echo 'idPlayer : '.$player->idPlayer;
-                            
-                            
-                            $_SESSION['idPlayer'] = $player->idPlayer;
-                            $_SESSION['idHand'] = $idHand;
-                            $_SESSION['idGame'] = $idGame;
-                            
-                            
-                            
-                            $this->redirect(array("controller" => "Games", 
-                                "action" => "play",
-                                $idGame));
-                        }
-                        else{
-                            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
-                        }
+                    
+                    if(TableRegistry::get('Players')->save($player)){
+                        GamesController::addPlayer($idGame, $player->idPlayer);
+                        //echo 'idPlayer : '.$player->idPlayer;
+
+
+                        $_SESSION['idPlayer'] = $player->idPlayer;
+                        $_SESSION['idHand'] = $idHand;
+                        $_SESSION['idGame'] = $idGame;
+
+
+
+                        $this->redirect(array("controller" => "Games", 
+                            "action" => "play",
+                            $idGame));
                     }
                     else{
-                        $this->Flash->error(__('Joueur déjà présent dans une partie.'));
+                        $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
                     }
+                }
+                else{
+                    
+                    $_SESSION['idPlayer'] = $player->idPlayer;
+                    $_SESSION['idHand'] = $player->hand;
+                    $_SESSION['idGame'] = $idGame;
+                    
+                    
+                    
+                    //$this->Flash->error(__('Joueur déjà présent dans une partie.'));
+                    $this->redirect(array("controller" => "Games", 
+                            "action" => "play",
+                            $idGame));
                 }
             }
         }

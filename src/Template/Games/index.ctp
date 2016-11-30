@@ -16,6 +16,7 @@
         <th>carte defaussée</th>
         <th>tour joueur</th>
         <th>playing ?</th>
+        <th>finished ?</th>
         <th>Actions</th>
     </tr>
 
@@ -48,6 +49,9 @@
         </td>
         <td>
             <?= $game->playing ?>
+        </td>
+        <td>
+            <?= $game->finished ?>
         </td>
         <td>
             <?= $this->Form->postLink(

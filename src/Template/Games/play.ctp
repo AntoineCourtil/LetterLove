@@ -238,7 +238,7 @@ use Cake\ORM\TableRegistry;
                 var liste ="<ul>";
                 
                 for(var i=1;i<17;i++){
-                    if(res['card'+i]!="null"){
+                    if(res['card'+i]!="null" && res['status']!="error"){
                         
                         liste = liste + "<li><b>"+i+"</b> : "+res['card'+i]+"</li>";
                     }

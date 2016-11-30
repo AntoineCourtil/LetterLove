@@ -10,4 +10,5 @@
 <p>defausse : <?= h($party->carteDefaussee) ?></p>
 <p>defausse : <?= h($party->tourPlayer) ?></p>
 <p>playing ? : <?= h($party->playing) ?></p>
+<p>playing ? : <?= h($party->finished) ?></p>
 <p><small>idParty : <?= h($party->idParty) ?></small></p>

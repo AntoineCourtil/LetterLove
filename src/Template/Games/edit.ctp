@@ -12,6 +12,7 @@
     echo $this->Form->input('carteDefaussee');
     echo $this->Form->input('tourPlayer');
     echo $this->Form->input('playing');
+    echo $this->Form->input('finished');
     echo $this->Form->button(__("Sauvegarder la partie"));
     echo $this->Form->end();
 ?>

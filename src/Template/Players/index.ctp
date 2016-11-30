@@ -11,7 +11,6 @@
         <th>hand</th>
         <th>defausse</th>
         <th>ready ?</th>
-        <th>connected ?</th>
         <th>Actions</th>
     </tr>
 
@@ -29,9 +28,6 @@
         </td>
         <td>
             <?= $player->ready ?>
-        </td>
-        <td>
-            <?= $player->connected ?>
         </td>
         <td>
             <?= $this->Form->postLink(

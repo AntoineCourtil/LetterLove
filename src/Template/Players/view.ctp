@@ -4,5 +4,4 @@
 <p>Hand : <?= h($player->hand) ?></p>
 <p>Hand : <?= h($player->defausse) ?></p>
 <p>Ready ? : <?= h($player->ready) ?></p>
-<p>Connected ? : <?= h($player->connected) ?></p>
 <p><small>id : <?= h($player->idPlayer) ?></small></p>
