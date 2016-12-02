@@ -84,6 +84,7 @@ class PlayersController extends AppController
             if($posCard=="1" || $posCard==1){
                 $card = $hand->card1;
                 PilesController::defausse($defausse, $hand->card1);
+                $hand->excard=$hand->card1;
                 $hand->card1=null;
 
             }
@@ -91,6 +92,7 @@ class PlayersController extends AppController
                 $posCard=="2";
                 $card = $hand->card2;
                 PilesController::defausse($defausse, $hand->card2);
+                $hand->excard=$hand->card2;
                 $hand->card2=null;
             }
 
@@ -118,20 +120,26 @@ class PlayersController extends AppController
         
         echo json_encode($data);
     }
+    
+    public static function haveCard($idPlayer, $idCard){
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        
+        return HandsController::haveCard($player->hand, $idCard);
+    }
 
-        public function edit($idPlayer = null){
-            $player = $this->Players->get($idPlayer);
-            if ($this->request->is(['post', 'put'])) {
-                $this->Players->patchEntity($player, $this->request->data);
-                if ($this->Players->save($player)) {
-                    $this->Flash->success(__('Votre joueur a été mis à jour.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-                $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+    public function edit($idPlayer = null){
+        $player = $this->Players->get($idPlayer);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Players->patchEntity($player, $this->request->data);
+            if ($this->Players->save($player)) {
+                $this->Flash->success(__('Votre joueur a été mis à jour.'));
+                return $this->redirect(['action' => 'index']);
             }
-
-            $this->set('player', $player);
+            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
         }
+
+        $this->set('player', $player);
+    }
     
     public function delete($idPlayer)
     {

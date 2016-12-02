@@ -23,6 +23,16 @@ class HandsController extends AppController
         $this->set(compact('hand'));
     }
     
+    public static function haveCard($idHand, $idCard){
+        $hand = TableRegistry::get('Hands')->get($idHand);
+        
+        if($hand->card1 == $idCard || $hand->card2 == $idCard || $hand->excard == $idCard){
+            return true;
+        }
+        
+        return false;
+    }
+    
     public static function nbcards($hand){
         $res = 0;
         

@@ -30,49 +30,55 @@ class GamesController extends AppController
     
     public static function king(){
         
-        $choice = $_POST['choice'];
+        if(PlayersController::haveCard($_SESSION['idPlayer'], 6)){
         
-        $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
-        $data = array();
-        
-        $idChoose = -1;
-        
-        if($choice == 1){
-            $idChoose=$game->player1;
-        }
-        if($choice == 2){
-            $idChoose=$game->player2;
-        }
-        if($choice == 3){
-            $idChoose=$game->player3;
-        }
-        if($choice == 4){
-            $idChoose=$game->player4;
-        }
-        if($_SESSION['idPlayer']==$choice){
-            $idChoose=-1;
-        }
-        
-        if($idChoose!=-1){
-            $data['status'] = 'success';
-            
-            $playerChoose = TableRegistry::get('Players')->get($idChoose);
-            $player = TableRegistry::get('Players')->get($_SESSION['idPlayer']);
-            
-            $handPlayer = $player->hand;
-            $handChoose = $playerChoose->hand;
-            
-            $player->hand = $handChoose;
-            $playerChoose->hand = $handPlayer;
-            
-            TableRegistry::get('Players')->save($player);
-            TableRegistry::get('Players')->save($playerChoose);
-            
-            GamesController::nextPlayer($_SESSION['idGame']);
-            
+            $choice = $_POST['choice'];
+
+            $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
+            $data = array();
+
+            $idChoose = -1;
+
+            if($choice == 1){
+                $idChoose=$game->player1;
+            }
+            if($choice == 2){
+                $idChoose=$game->player2;
+            }
+            if($choice == 3 && $game->player3!=null){
+                $idChoose=$game->player3;
+            }
+            if($choice == 4 && $game->player4!=null){
+                $idChoose=$game->player4;
+            }
+            if($_SESSION['idPlayer']==$idChoose){
+                $idChoose=-1;
+            }
+
+            if(($idChoose!=-1) && ($game->tourPlayer == $_SESSION['idPlayer'])){
+                $data['status'] = 'success';
+
+                $playerChoose = TableRegistry::get('Players')->get($idChoose);
+                $player = TableRegistry::get('Players')->get($_SESSION['idPlayer']);
+
+                $handPlayer = $player->hand;
+                $handChoose = $playerChoose->hand;
+
+                $player->hand = $handChoose;
+                $playerChoose->hand = $handPlayer;
+
+                TableRegistry::get('Players')->save($player);
+                TableRegistry::get('Players')->save($playerChoose);
+
+                GamesController::nextPlayer($_SESSION['idGame']);
+
+            }
+            else{
+                $data['status'] = 'error';
+            }
         }
         else{
-            $data['status'] = 'error';
+            $data['status'] = 'errorCard';
         }
         
         
@@ -209,12 +215,58 @@ class GamesController extends AppController
             return false;
         }
         else{
-            $game->finished = true;
-            TableRegistry::get('Games')->save($game);
-            return true;
+            
+            if(GamesController::checkHands($game)){
+            
+                $game->finished = true;
+                TableRegistry::get('Games')->save($game);
+                return true;
+            }
         }
         
-        TableRegistry::get('Games')->save($game);
+        return false;
+    }
+    
+    public static function checkHands($game){
+        
+        if($game->player1 != null){
+            if(!GamesController::checkHand($game->player1)){
+                return false;
+            }
+        }
+        
+        if($game->player2 != null){
+            if(!GamesController::checkHand($game->player2)){
+                return false;
+            }
+        }
+        
+        if($game->player3 != null){
+            if(!GamesController::checkHand($game->player3)){
+                return false;
+            }
+        }
+        
+        if($game->player4 != null){
+            if(!GamesController::checkHand($game->player4)){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public static function checkHand($idPlayer){
+        
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        $hand = TableRegistry::get('Hands')->get($player->hand);
+        
+        if(HandsController::nbcards($hand) > 1){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     public static function piocher($idGame, $idPlayer){

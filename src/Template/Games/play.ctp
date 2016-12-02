@@ -108,7 +108,7 @@ use Cake\ORM\TableRegistry;
             
             .done(function(data){
                 
-                console.log(data);
+                //console.log(data);
                 
                 var res = jQuery.parseJSON(data);
 
