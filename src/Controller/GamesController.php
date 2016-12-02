@@ -30,12 +30,13 @@ class GamesController extends AppController
     
     public static function king(){
         
+        $data = array();
+        
         if(PlayersController::haveCard($_SESSION['idPlayer'], 6)){
         
             $choice = $_POST['choice'];
 
             $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
-            $data = array();
 
             $idChoose = -1;
 
@@ -78,12 +79,63 @@ class GamesController extends AppController
             }
         }
         else{
-            $data['status'] = 'errorCard';
+            $data['status'] = 'error';
         }
         
         
         echo json_encode($data);
         
+    }
+    
+    public static function priest(){
+        
+        $data = array();
+        
+        if(PlayersController::haveCard($_SESSION['idPlayer'], 2)){
+            
+            $choice = $_POST['choice'];
+
+            $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
+
+            $idChoose = -1;
+
+            if($choice == 1){
+                $idChoose=$game->player1;
+            }
+            if($choice == 2){
+                $idChoose=$game->player2;
+            }
+            if($choice == 3 && $game->player3!=null){
+                $idChoose=$game->player3;
+            }
+            if($choice == 4 && $game->player4!=null){
+                $idChoose=$game->player4;
+            }
+            if($_SESSION['idPlayer']==$idChoose){
+                $idChoose=-1;
+            }
+            
+            if(($idChoose!=-1) && ($game->tourPlayer == $_SESSION['idPlayer'])){
+                $data['status'] = 'success';
+            
+                $player = TableRegistry::get('Players')->get($idChoose);
+                $hand = TableRegistry::get('Hands')->get($player->hand);
+
+                $data['card1'] = $hand->card1;
+                $data['card2'] = $hand->card2;
+
+                GamesController::nextPlayer($_SESSION['idGame']);
+            }
+            else{
+                $data['status'] = 'error';
+            }
+        }
+        
+        else{
+            $data['status'] = 'error';
+        }
+        
+        echo json_encode($data);
     }
 
     public static function firstTour($game){

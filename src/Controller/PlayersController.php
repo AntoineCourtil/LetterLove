@@ -106,6 +106,9 @@ class PlayersController extends AppController
             if($card == 6){ // KING
                 $data['actions'] = "king";
             }
+            else if($card == 2){ // PRIEST
+                $data['actions'] = "priest";
+            }
             else{
                 GamesController::nextPlayer($idGame);
             }

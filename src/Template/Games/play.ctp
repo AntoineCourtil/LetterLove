@@ -271,6 +271,26 @@ use Cake\ORM\TableRegistry;
             });
     }
     
+    function priest(){
+        
+        player = prompt("Veuillez choisir un joueur (1,2,3 ou 4) : ");
+        
+        
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'priest'])?>", {choice : player})
+            
+            .done(function(data){
+                console.log(data);
+                var res = jQuery.parseJSON(data);
+                
+                if(res['status'] == "error"){
+                    priest();
+                }
+                else{
+                    alert("Carte 1 : "+res['card1']+"\nCarte 2 : "+res['card2']);
+                }
+            });
+    }
+    
     
     
     function defausse(posCard){
@@ -282,9 +302,11 @@ use Cake\ORM\TableRegistry;
                 var res = jQuery.parseJSON(data);
                 
                 if(res['actions'] == "king"){
-                    console.log("king");
                     king();
-            }
+                }
+                if(res['actions'] == "priest"){
+                    priest();
+                }
         });
         
     }
