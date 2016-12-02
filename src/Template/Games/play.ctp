@@ -282,7 +282,6 @@ use Cake\ORM\TableRegistry;
         $.post("<?= $this->Url->build(['controller'=>'games','action'=>'priest'])?>", {choice : player})
             
             .done(function(data){
-                console.log(data);
                 var res = jQuery.parseJSON(data);
                 
                 if(res['status'] == "error"){
@@ -301,7 +300,6 @@ use Cake\ORM\TableRegistry;
         $.post("<?= $this->Url->build(['controller'=>'games','action'=>'handmaid'])?>")
             
             .done(function(data){
-                console.log(data);
                 var res = jQuery.parseJSON(data);
                 
                 if(res['status'] == "error"){
@@ -309,6 +307,23 @@ use Cake\ORM\TableRegistry;
                 }
                 else{
                     $("#infos").html("Vous êtes protégé pendant un tour");
+                }
+            });
+    }
+    
+    function prince(){
+        
+        player = prompt("Veuillez choisir un joueur (1,2,3 ou 4) : ");
+        
+        
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'prince'])?>", {choice : player})
+            
+            .done(function(data){
+                console.log(data);
+                var res = jQuery.parseJSON(data);
+                
+                if(res['status'] == "error"){
+                    prince();
                 }
             });
     }
@@ -331,6 +346,9 @@ use Cake\ORM\TableRegistry;
                 }
                 if(res['actions'] == "handmaid"){
                     handmaid();
+                }
+                if(res['actions'] == "prince"){
+                    prince();
                 }
         });
         

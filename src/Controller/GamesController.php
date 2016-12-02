@@ -188,6 +188,84 @@ class GamesController extends AppController
         
         echo json_encode($data);
     }
+    
+    public static function prince(){
+        
+        $data = array();
+        
+        if(PlayersController::haveCard($_SESSION['idPlayer'], 5)){
+            
+            $choice = $_POST['choice'];
+
+            $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
+
+            $idChoose = -1;
+
+            if($choice == 1){
+                $player1 = TableRegistry::get('Players')->get($game->player1);
+                if(!$player1->protected){
+                    $idChoose=$game->player1;
+                }
+            }
+            if($choice == 2){
+                $player2 = TableRegistry::get('Players')->get($game->player2);
+                if(!$player2->protected){
+                    $idChoose=$game->player2;
+                }
+            }
+            if($choice == 3 && $game->player3!=null){
+                $player3 = TableRegistry::get('Players')->get($game->player3);
+                if(!$player3->protected){
+                    $idChoose=$game->player3;
+                }
+            }
+            if($choice == 4 && $game->player4!=null){
+                $player4 = TableRegistry::get('Players')->get($game->player4);
+                if(!$player4->protected){
+                    $idChoose=$game->player4;
+                }
+            }
+            /*if($_SESSION['idPlayer']==$idChoose){
+                $idChoose=-1;
+            }*/
+            
+            if(($idChoose!=-1) && ($game->tourPlayer == $_SESSION['idPlayer'])){
+                $data['status'] = 'success';
+            
+                $player = TableRegistry::get('Players')->get($idChoose);
+                $hand = TableRegistry::get('Hands')->get($player->hand);
+                $defausse = TableRegistry::get('Piles')->get($player->defausse);
+                
+                if($hand->card1 != null){
+                    $card = $hand->card1;
+                    PilesController::defausse($defausse, $hand->card1);
+                    $hand->excard=null;
+                    $hand->card1=null;
+                }
+                else{
+                    $card = $hand->card2;
+                    PilesController::defausse($defausse, $hand->card2);
+                    $hand->excard=null;
+                    $hand->card2=null;
+                }
+                
+                GamesController::piocher($_SESSION['idGame'], $idChoose);
+                
+                TableRegistry::get('Hands')->save($hand);
+
+                GamesController::nextPlayer($_SESSION['idGame']);
+            }
+            else{
+                $data['status'] = 'error';
+            }
+        }
+        
+        else{
+            $data['status'] = 'error';
+        }
+        
+        echo json_encode($data);
+    }
 
     public static function firstTour($game){
         
