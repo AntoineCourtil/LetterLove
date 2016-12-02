@@ -79,7 +79,7 @@ use Cake\ORM\TableRegistry;
     function piocher(){
         
         if(myTurn){
-            console.log("piocher");
+            //console.log("piocher");
             
             //$.post("<?php // $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
             $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>")
@@ -91,7 +91,7 @@ use Cake\ORM\TableRegistry;
             pioche=true;
         }
         else{
-            console.log("pas votre tour");
+            //console.log("pas votre tour");
         }
             
     }
@@ -201,7 +201,7 @@ use Cake\ORM\TableRegistry;
                 return 'name';
                 
                 
-            });
+        });
     }
     
     function listDefausse(){
@@ -225,7 +225,7 @@ use Cake\ORM\TableRegistry;
                 //console.log(data);
                 
                 
-            });
+        });
     }
     
     function listDefausseP(player){
@@ -233,7 +233,7 @@ use Cake\ORM\TableRegistry;
             .done(function(data){
                 var res = jQuery.parseJSON(data);
                 
-                console.log(player);
+                //console.log(player);
                 
                 var liste ="<ul>";
                 
@@ -249,23 +249,42 @@ use Cake\ORM\TableRegistry;
                 //console.log(data);
                 
                 
+         });
+    }
+    
+    function king(){
+        
+        player = prompt("Veuillez choisir un joueur (1,2,3 ou 4) : ");
+        
+        
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'king'])?>", {choice : player})
+            
+            .done(function(data){
+                console.log(data);
+                var res = jQuery.parseJSON(data);
+                
+                if(res['status'] == "error"){
+                    king();
+                }
             });
     }
     
+    
+    
     function defausse(posCard){
-        $.post("<?= $this->Url->build(['controller'=>'players','action'=>'defaussecard'])?>", { /*idPlayer: idPlayer, */posCard: posCard})
+        
+        $.post("<?= $this->Url->build(['controller'=>'players','action'=>'defaussecard'])?>", {posCard: posCard})
+            
             
             .done(function(data){
+                var res = jQuery.parseJSON(data);
                 
-                
-                //var res = jQuery.parseJSON(data);
-                
-                
-                
-                //console.log(data);
-                
-                
-            });
+                if(res['actions'] == "king"){
+                    console.log("king");
+                    king();
+            }
+        });
+        
     }
 
     setInterval(refresh, 1000); // Répète la fonction toutes les 1 sec

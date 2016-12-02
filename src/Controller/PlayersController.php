@@ -82,11 +82,14 @@ class PlayersController extends AppController
         if($game->tourPlayer == $idPlayer && $nbCards>1){
         
             if($posCard=="1" || $posCard==1){
+                $card = $hand->card1;
                 PilesController::defausse($defausse, $hand->card1);
                 $hand->card1=null;
 
             }
             else{
+                $posCard=="2";
+                $card = $hand->card2;
                 PilesController::defausse($defausse, $hand->card2);
                 $hand->card2=null;
             }
@@ -94,13 +97,24 @@ class PlayersController extends AppController
             TableRegistry::get('Hands')->save($hand);
             TableRegistry::get('Piles')->save($defausse);
             
-            GamesController::nextPlayer($idGame);
             
             $data['response']="success";
+            $data['actions'] = "";
+            
+            if($card == 6){ // KING
+                $data['actions'] = "king";
+            }
+            else{
+                GamesController::nextPlayer($idGame);
+            }
+            
+            
         
         }
         
-        $data['response']="error";
+        else{
+            $data['response']="error";
+        }
         
         echo json_encode($data);
     }

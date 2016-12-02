@@ -28,6 +28,58 @@ class GamesController extends AppController
         $this->set(compact('game'));
     }
     
+    public static function king(){
+        
+        $choice = $_POST['choice'];
+        
+        $game = TableRegistry::get('Games')->get($_SESSION['idGame']);
+        $data = array();
+        
+        $idChoose = -1;
+        
+        if($choice == 1){
+            $idChoose=$game->player1;
+        }
+        if($choice == 2){
+            $idChoose=$game->player2;
+        }
+        if($choice == 3){
+            $idChoose=$game->player3;
+        }
+        if($choice == 4){
+            $idChoose=$game->player4;
+        }
+        if($_SESSION['idPlayer']==$choice){
+            $idChoose=-1;
+        }
+        
+        if($idChoose!=-1){
+            $data['status'] = 'success';
+            
+            $playerChoose = TableRegistry::get('Players')->get($idChoose);
+            $player = TableRegistry::get('Players')->get($_SESSION['idPlayer']);
+            
+            $handPlayer = $player->hand;
+            $handChoose = $playerChoose->hand;
+            
+            $player->hand = $handChoose;
+            $playerChoose->hand = $handPlayer;
+            
+            TableRegistry::get('Players')->save($player);
+            TableRegistry::get('Players')->save($playerChoose);
+            
+            GamesController::nextPlayer($_SESSION['idGame']);
+            
+        }
+        else{
+            $data['status'] = 'error';
+        }
+        
+        
+        echo json_encode($data);
+        
+    }
+
     public static function firstTour($game){
         
         GamesController::piocher($game->idGame, $game->player1);
