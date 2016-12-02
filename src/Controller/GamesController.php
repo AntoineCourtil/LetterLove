@@ -144,10 +144,29 @@ class GamesController extends AppController
         
         $data['status'] = 'success';
         $data['turnPlayer'] = $game->tourPlayer;
-        $data['player1'] = $game->player1;
-        $data['player2'] = $game->player2;
-        $data['player3'] = $game->player3;
-        $data['player4'] = $game->player4;
+        
+        
+        $data['player1'] = "";
+        $data['player2'] = "";
+        $data['player3'] = "";
+        $data['player4'] = "";
+        
+        if($game->player1 != null){
+            $player1 = TableRegistry::get('Players')->get($game->player1);
+            $data['player1'] = $player1->name;
+        }
+        if($game->player2 != null){
+            $player2 = TableRegistry::get('Players')->get($game->player2);
+            $data['player2'] = $player2->name;
+        }
+        if($game->player3 != null){
+            $player3 = TableRegistry::get('Players')->get($game->player3);
+            $data['player3'] = $player3->name;
+        }
+        if($game->player4 != null){
+            $player4 = TableRegistry::get('Players')->get($game->player4);
+            $data['player4'] = $player4->name;
+        }
         
         $data['carteRestantes'] = PilesController::count($pioche->idPile);
         $data['carteDefaussees'] = PilesController::count($defausse->idPile);

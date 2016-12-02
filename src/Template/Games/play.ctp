@@ -107,6 +107,9 @@ use Cake\ORM\TableRegistry;
         $.post("<?= $this->Url->build(['controller'=>'games','action'=>'refresh'])?>")
             
             .done(function(data){
+                
+                console.log(data);
+                
                 var res = jQuery.parseJSON(data);
 
 
@@ -189,7 +192,6 @@ use Cake\ORM\TableRegistry;
     }
     
     function nameOfCard(){
-        //$.post("<?php // $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>", { idCard: idCard})
         $.post("<?= $this->Url->build(['controller'=>'cards','action'=>'nameof'])?>")
             
             .done(function(data){
