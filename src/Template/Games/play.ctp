@@ -21,6 +21,7 @@ use Cake\ORM\TableRegistry;
 </p>
 
 <p>A qui le tour ? <span id="turn"/></p>
+<p>Infos : <span id="infos"/></p>
 
 <button id="pret" onclick="pret(<?php echo $_SESSION['idPlayer'];?>)" value="Pret"><span id="txtPret">Prêt ?</span></button>
 
@@ -80,6 +81,8 @@ use Cake\ORM\TableRegistry;
         
         if(myTurn){
             //console.log("piocher");
+            
+            $("#infos").html("");
             
             //$.post("<?php // $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>", { idGame: idGame, idPlayer: idPlayer})
             $.post("<?= $this->Url->build(['controller'=>'games','action'=>'piocher/'])?>")
@@ -291,6 +294,25 @@ use Cake\ORM\TableRegistry;
             });
     }
     
+    function handmaid(){
+        
+        
+        
+        $.post("<?= $this->Url->build(['controller'=>'games','action'=>'handmaid'])?>")
+            
+            .done(function(data){
+                console.log(data);
+                var res = jQuery.parseJSON(data);
+                
+                if(res['status'] == "error"){
+                    handmaid();
+                }
+                else{
+                    $("#infos").html("Vous êtes protégé pendant un tour");
+                }
+            });
+    }
+    
     
     
     function defausse(posCard){
@@ -306,6 +328,9 @@ use Cake\ORM\TableRegistry;
                 }
                 if(res['actions'] == "priest"){
                     priest();
+                }
+                if(res['actions'] == "handmaid"){
+                    handmaid();
                 }
         });
         

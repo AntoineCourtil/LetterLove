@@ -11,6 +11,8 @@
         <th>hand</th>
         <th>defausse</th>
         <th>ready ?</th>
+        <th>playing</th>
+        <th>protected ?</th>
         <th>Actions</th>
     </tr>
 
@@ -28,6 +30,12 @@
         </td>
         <td>
             <?= $player->ready ?>
+        </td>
+        <td>
+            <?= $player->playing ?>
+        </td>
+        <td>
+            <?= $player->protected ?>
         </td>
         <td>
             <?= $this->Form->postLink(

@@ -43,20 +43,32 @@ class GamesController extends AppController
             $idChoose = -1;
 
             if($choice == 1){
-                $idChoose=$game->player1;
+                $player1 = TableRegistry::get('Players')->get($game->player1);
+                if(!$player1->protected){
+                    $idChoose=$game->player1;
+                }
             }
             if($choice == 2){
-                $idChoose=$game->player2;
+                $player2 = TableRegistry::get('Players')->get($game->player2);
+                if(!$player2->protected){
+                    $idChoose=$game->player2;
+                }
             }
             if($choice == 3 && $game->player3!=null){
-                $idChoose=$game->player3;
+                $player3 = TableRegistry::get('Players')->get($game->player3);
+                if(!$player3->protected){
+                    $idChoose=$game->player3;
+                }
             }
             if($choice == 4 && $game->player4!=null){
-                $idChoose=$game->player4;
+                $player4 = TableRegistry::get('Players')->get($game->player4);
+                if(!$player4->protected){
+                    $idChoose=$game->player4;
+                }
             }
-            if($_SESSION['idPlayer']==$idChoose){
+            /*if($_SESSION['idPlayer']==$idChoose){
                 $idChoose=-1;
-            }
+            }*/
 
             if(($idChoose!=-1) && ($game->tourPlayer == $_SESSION['idPlayer'])){
                 $data['status'] = 'success';
@@ -102,20 +114,32 @@ class GamesController extends AppController
             $idChoose = -1;
 
             if($choice == 1){
-                $idChoose=$game->player1;
+                $player1 = TableRegistry::get('Players')->get($game->player1);
+                if(!$player1->protected){
+                    $idChoose=$game->player1;
+                }
             }
             if($choice == 2){
-                $idChoose=$game->player2;
+                $player2 = TableRegistry::get('Players')->get($game->player2);
+                if(!$player2->protected){
+                    $idChoose=$game->player2;
+                }
             }
             if($choice == 3 && $game->player3!=null){
-                $idChoose=$game->player3;
+                $player3 = TableRegistry::get('Players')->get($game->player3);
+                if(!$player3->protected){
+                    $idChoose=$game->player3;
+                }
             }
             if($choice == 4 && $game->player4!=null){
-                $idChoose=$game->player4;
+                $player4 = TableRegistry::get('Players')->get($game->player4);
+                if(!$player4->protected){
+                    $idChoose=$game->player4;
+                }
             }
-            if($_SESSION['idPlayer']==$idChoose){
+            /*if($_SESSION['idPlayer']==$idChoose){
                 $idChoose=-1;
-            }
+            }*/
             
             if(($idChoose!=-1) && ($game->tourPlayer == $_SESSION['idPlayer'])){
                 $data['status'] = 'success';
@@ -133,6 +157,29 @@ class GamesController extends AppController
             else{
                 $data['status'] = 'error';
             }
+        }
+        
+        else{
+            $data['status'] = 'error';
+        }
+        
+        echo json_encode($data);
+    }
+    
+    public static function handmaid(){
+        
+        $data = array();
+        
+        if(PlayersController::haveCard($_SESSION['idPlayer'], 4)){
+            $data['status'] = 'success';
+            
+            $player = TableRegistry::get('Players')->get($_SESSION['idPlayer']);
+            
+            $player->protected = true;
+            
+            TableRegistry::get('Players')->save($player);
+
+            GamesController::nextPlayer($_SESSION['idGame']);
         }
         
         else{
@@ -320,7 +367,10 @@ class GamesController extends AppController
         $game = TableRegistry::get('Games')->get($idGame);
         $player = TableRegistry::get('Players')->get($idPlayer);
         $pioche = TableRegistry::get('Piles')->get($game->pioche);
-        $hand = TableRegistry::get('Hands')->get($player->hand);     
+        $hand = TableRegistry::get('Hands')->get($player->hand);
+        
+        $player->protected = false;
+        TableRegistry::get('Players')->save($player);
         
         
         if(HandsController::nbcards($hand)<2){
