@@ -155,6 +155,15 @@ class PlayersController extends AppController
         }
     }
     
+    public static function nameOfPlayer($idPlayer){
+        if($idPlayer==null){
+            return "";
+        }
+        
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        return $player->name;
+    }
+    
     public function login()
     {
         $player = $this->Players->newEntity();

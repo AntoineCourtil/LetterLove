@@ -118,7 +118,7 @@ use Cake\ORM\TableRegistry;
 
                 turnPlayer = res['turnPlayer'];
 
-                $("#turn").html("Joueur <b>"+res['turnPlayer']+"</b>");
+                $("#turn").html("Joueur <b>"+res['turnPlayerName']+"</b>");
 
                 if(idPlayer==turnPlayer){
                     myTurn=true;
@@ -286,7 +286,7 @@ use Cake\ORM\TableRegistry;
                     priest();
                 }
                 else{
-                    alert("Carte 1 : "+res['card1']+"\nCarte 2 : "+res['card2']);
+                    alert("Joueur : "+res['player']+"\n\nCarte 1 : "+res['card1']+"\nCarte 2 : "+res['card2']);
                 }
             });
     }

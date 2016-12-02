@@ -2,6 +2,8 @@
 
 use Cake\ORM\TableRegistry;
 use App\Controller\PilesController;
+use App\Controller\PlayersController;
+use App\Controller\CardsController;
 use App\Controller\HandsController;
 
 if (session_status() == PHP_SESSION_NONE) {
@@ -121,8 +123,10 @@ class GamesController extends AppController
                 $player = TableRegistry::get('Players')->get($idChoose);
                 $hand = TableRegistry::get('Hands')->get($player->hand);
 
-                $data['card1'] = $hand->card1;
-                $data['card2'] = $hand->card2;
+                $data['card1'] = CardsController::nameOfCard($hand->card1);
+                $data['card2'] = CardsController::nameOfCard($hand->card2);
+                
+                $data['player'] = PlayersController::nameOfPlayer($idChoose);
 
                 GamesController::nextPlayer($_SESSION['idGame']);
             }
@@ -202,29 +206,14 @@ class GamesController extends AppController
         
         $data['status'] = 'success';
         $data['turnPlayer'] = $game->tourPlayer;
+        $data['turnPlayerName'] = PlayersController::nameOfPlayer($game->tourPlayer);
         
         
-        $data['player1'] = "";
-        $data['player2'] = "";
-        $data['player3'] = "";
-        $data['player4'] = "";
+        $data['player1'] = PlayersController::nameOfPlayer($game->player1);
+        $data['player2'] = PlayersController::nameOfPlayer($game->player2);
+        $data['player3'] = PlayersController::nameOfPlayer($game->player3);
+        $data['player4'] = PlayersController::nameOfPlayer($game->player4);
         
-        if($game->player1 != null){
-            $player1 = TableRegistry::get('Players')->get($game->player1);
-            $data['player1'] = $player1->name;
-        }
-        if($game->player2 != null){
-            $player2 = TableRegistry::get('Players')->get($game->player2);
-            $data['player2'] = $player2->name;
-        }
-        if($game->player3 != null){
-            $player3 = TableRegistry::get('Players')->get($game->player3);
-            $data['player3'] = $player3->name;
-        }
-        if($game->player4 != null){
-            $player4 = TableRegistry::get('Players')->get($game->player4);
-            $data['player4'] = $player4->name;
-        }
         
         $data['carteRestantes'] = PilesController::count($pioche->idPile);
         $data['carteDefaussees'] = PilesController::count($defausse->idPile);

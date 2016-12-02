@@ -38,6 +38,10 @@ class CardsController extends AppController
     
     public static function nameOfCard($idCard){
         
+        if($idCard==null){
+            return "";
+        }
+        
         $card = TableRegistry::get('Cards')->get($idCard);
         
         return $card->title;
