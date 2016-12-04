@@ -61,9 +61,18 @@ class PlayersTable extends Table
             ->notEmpty('ready');
 
         $validator
-            ->boolean('connected')
-            ->requirePresence('connected', 'create')
-            ->notEmpty('connected');
+            ->integer('defausse')
+            ->allowEmpty('defausse');
+
+        $validator
+            ->boolean('playing')
+            ->requirePresence('playing', 'create')
+            ->notEmpty('playing');
+
+        $validator
+            ->boolean('protected')
+            ->requirePresence('protected', 'create')
+            ->notEmpty('protected');
 
         return $validator;
     }

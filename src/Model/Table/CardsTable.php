@@ -31,7 +31,6 @@ class CardsTable extends Table
         parent::initialize($config);
 
         $this->table('cards');
-        $this->displayField('title');
         $this->displayField('quantity');
         $this->primaryKey('id');
     }

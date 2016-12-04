@@ -2,11 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/antoine/projetPHP/LoveLetter/src/Template/Games/king.ctp</file>
-            <file>file:/home/antoine/projetPHP/LoveLetter/src/Controller/GamesController.php</file>
-            <file>file:/home/antoine/projetPHP/LoveLetter/src/Template/Games/play.ctp</file>
-            <file>file:/home/antoine/projetPHP/LoveLetter/src/Controller/PlayersController.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

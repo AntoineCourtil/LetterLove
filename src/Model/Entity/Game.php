@@ -14,6 +14,9 @@ use Cake\ORM\Entity;
  * @property bool $playing
  * @property int $player3
  * @property int $player4
+ * @property int $carteDefaussee
+ * @property int $tourPlayer
+ * @property bool $finished
  */
 class Game extends Entity
 {

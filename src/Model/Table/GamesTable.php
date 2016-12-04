@@ -78,6 +78,20 @@ class GamesTable extends Table
             ->integer('player4')
             ->allowEmpty('player4');
 
+        $validator
+            ->integer('carteDefaussee')
+            ->requirePresence('carteDefaussee', 'create')
+            ->notEmpty('carteDefaussee');
+
+        $validator
+            ->integer('tourPlayer')
+            ->allowEmpty('tourPlayer');
+
+        $validator
+            ->boolean('finished')
+            ->requirePresence('finished', 'create')
+            ->notEmpty('finished');
+
         return $validator;
     }
 }

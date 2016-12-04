@@ -55,6 +55,15 @@ class HandsTable extends Table
             ->integer('card2')
             ->allowEmpty('card2');
 
+        $validator
+            ->integer('idPlayer')
+            ->requirePresence('idPlayer', 'create')
+            ->notEmpty('idPlayer');
+
+        $validator
+            ->integer('excard')
+            ->allowEmpty('excard');
+
         return $validator;
     }
 }

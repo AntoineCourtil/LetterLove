@@ -9,6 +9,8 @@ use Cake\ORM\Entity;
  * @property int $idHand
  * @property int $card1
  * @property int $card2
+ * @property int $idPlayer
+ * @property int $excard
  */
 class Hand extends Entity
 {

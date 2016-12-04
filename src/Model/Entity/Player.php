@@ -10,7 +10,9 @@ use Cake\ORM\Entity;
  * @property int $hand
  * @property string $name
  * @property bool $ready
- * @property bool $connected
+ * @property int $defausse
+ * @property bool $playing
+ * @property bool $protected
  */
 class Player extends Entity
 {

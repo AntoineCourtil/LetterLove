@@ -4,7 +4,12 @@ use Cake\ORM\TableRegistry;
 
 class CardsController extends AppController
 {
-
+    
+    //------------------------------------------------------------------------------------
+    //                              INITIALISATION
+    //------------------------------------------------------------------------------------
+    
+    
     public function initialize()
     {
         parent::initialize();
@@ -35,6 +40,38 @@ class CardsController extends AppController
         }
         $this->set('card', $card);
     }
+        public function edit($id = null)
+    {
+        $card = $this->Cards->get($id);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Cards->patchEntity($card, $this->request->data);
+            if ($this->Cards->save($card)) {
+                $this->Flash->success(__('Votre carte a été mise à jour.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre carte.'));
+        }
+
+        $this->set('card', $card);
+    }
+    
+    public function delete($id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $card = $this->Cards->get($id);
+        if ($this->Cards->delete($card)) {
+            $this->Flash->success(__("La carte avec l'id : {0} a été supprimée.", h($id)));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+    
+    
+    
+    //------------------------------------------------------------------------------------
+    //                              NAME OF
+    //------------------------------------------------------------------------------------
+    
     
     public static function nameOfCard($idCard){
         
@@ -60,31 +97,5 @@ class CardsController extends AppController
         
         echo json_encode($data);
         
-    }
-
-        public function edit($id = null)
-    {
-        $card = $this->Cards->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Cards->patchEntity($card, $this->request->data);
-            if ($this->Cards->save($card)) {
-                $this->Flash->success(__('Votre carte a été mise à jour.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Impossible de mettre à jour votre carte.'));
-        }
-
-        $this->set('card', $card);
-    }
-    
-    public function delete($id)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $card = $this->Cards->get($id);
-        if ($this->Cards->delete($card)) {
-            $this->Flash->success(__("La carte avec l'id : {0} a été supprimée.", h($id)));
-            return $this->redirect(['action' => 'index']);
-        }
     }
 }

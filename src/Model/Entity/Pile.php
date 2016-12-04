@@ -23,6 +23,7 @@ use Cake\ORM\Entity;
  * @property int $card14
  * @property int $card15
  * @property int $card16
+ * @property string $type
  */
 class Pile extends Entity
 {

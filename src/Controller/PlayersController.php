@@ -12,7 +12,11 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class PlayersController extends AppController
 {
-
+    
+    //------------------------------------------------------------------------------------
+    //                              INITIALISATION
+    //------------------------------------------------------------------------------------
+    
     public function initialize()
     {
         parent::initialize();
@@ -43,6 +47,126 @@ class PlayersController extends AppController
         }
         $this->set('player', $player);
     }
+
+    public function edit($idPlayer = null){
+        $player = $this->Players->get($idPlayer);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Players->patchEntity($player, $this->request->data);
+            if ($this->Players->save($player)) {
+                $this->Flash->success(__('Votre joueur a été mis à jour.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+        }
+
+        $this->set('player', $player);
+    }
+    
+    public function delete($idPlayer)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $player = $this->Players->get($idPlayer);
+        if ($this->Players->delete($player)) {
+            $this->Flash->success(__("Le joueur avec l'idPlayer : {0} a été supprimé.", h($idPlayer)));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+    
+    
+    //------------------------------------------------------------------------------------
+    //                              LOGIN FUNCTIONS FUNCTIONS
+    //------------------------------------------------------------------------------------
+    
+    
+    
+    public function login()
+    {
+        $player = $this->Players->newEntity();
+        if ($this->request->is('post')) {
+            
+            $player = $this->Players->patchEntity($player, $this->request->data);
+            if($player = $this->Players->findByName($player->name)->first()){
+                //echo 'Player finded';
+                
+                $idGame = -1;
+                $idGame = GamesController::isAlreadyPlaying($player->idPlayer);
+
+                if($idGame == -1){
+                    $idGame = GamesController::openedGame();
+                    
+                    $idHand = HandsController::newHand($player->idPlayer);
+                    $player->hand = $idHand;
+
+                    $defausse = PilesController::newDefausse();
+                    $player->defausse = $defausse->idPile;
+
+                    
+                    if(TableRegistry::get('Players')->save($player)){
+                        GamesController::addPlayer($idGame, $player->idPlayer);
+                        //echo 'idPlayer : '.$player->idPlayer;
+
+
+                        $_SESSION['idPlayer'] = $player->idPlayer;
+                        $_SESSION['idHand'] = $idHand;
+                        $_SESSION['idGame'] = $idGame;
+
+
+
+                        $this->redirect(array("controller" => "Games", 
+                            "action" => "play",
+                            $idGame));
+                    }
+                    else{
+                        $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
+                    }
+                }
+                else{
+                    
+                    $_SESSION['idPlayer'] = $player->idPlayer;
+                    $_SESSION['idHand'] = $player->hand;
+                    $_SESSION['idGame'] = $idGame;
+                    
+                    
+                    
+                    //$this->Flash->error(__('Joueur déjà présent dans une partie.'));
+                    $this->redirect(array("controller" => "Games", 
+                            "action" => "play",
+                            $idGame));
+                }
+            }
+        }
+    }
+    
+    public function create()
+    {
+        $player = $this->Players->newEntity();
+        if ($this->request->is('post')) {
+            //$player = $this->Players->patchEntity($player, $this->request->data);
+            
+            $player->name = $_POST['name'];
+            if ($this->Players->save($player)) {
+                $this->Flash->success(__('Votre joueur a été sauvegardé.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible d\'ajouter votre joueur.'));
+        }
+        $this->set('player', $player);
+    }
+    
+    //------------------------------------------------------------------------------------
+    //                              PLAYERS FUNCTIONS
+    //------------------------------------------------------------------------------------
+    
+    
+    public static function nameOfPlayer($idPlayer){
+        if($idPlayer==null){
+            return "";
+        }
+        
+        $player = TableRegistry::get('Players')->get($idPlayer);
+        return $player->name;
+    }
     
     public static function ready($idPlayer){
         $player = TableRegistry::get('Players')->get($idPlayer);
@@ -63,6 +187,11 @@ class PlayersController extends AppController
         
         echo json_encode($data);
     }
+    
+    
+    //------------------------------------------------------------------------------------
+    //                              CARD PLAYER FUNCTIONS
+    //------------------------------------------------------------------------------------
     
     public static function defaussecard(){
 
@@ -134,97 +263,5 @@ class PlayersController extends AppController
         $player = TableRegistry::get('Players')->get($idPlayer);
         
         return HandsController::haveCard($player->hand, $idCard);
-    }
-
-    public function edit($idPlayer = null){
-        $player = $this->Players->get($idPlayer);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Players->patchEntity($player, $this->request->data);
-            if ($this->Players->save($player)) {
-                $this->Flash->success(__('Votre joueur a été mis à jour.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
-        }
-
-        $this->set('player', $player);
-    }
-    
-    public function delete($idPlayer)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $player = $this->Players->get($idPlayer);
-        if ($this->Players->delete($player)) {
-            $this->Flash->success(__("Le joueur avec l'idPlayer : {0} a été supprimé.", h($idPlayer)));
-            return $this->redirect(['action' => 'index']);
-        }
-    }
-    
-    public static function nameOfPlayer($idPlayer){
-        if($idPlayer==null){
-            return "";
-        }
-        
-        $player = TableRegistry::get('Players')->get($idPlayer);
-        return $player->name;
-    }
-    
-    public function login()
-    {
-        $player = $this->Players->newEntity();
-        if ($this->request->is('post')) {
-            
-            $player = $this->Players->patchEntity($player, $this->request->data);
-            if($player = $this->Players->findByName($player->name)->first()){
-                //echo 'Player finded';
-                
-                $idGame = -1;
-                $idGame = GamesController::isAlreadyPlaying($player->idPlayer);
-
-                if($idGame == -1){
-                    $idGame = GamesController::openedGame();
-                    
-                    $idHand = HandsController::newHand($player->idPlayer);
-                    $player->hand = $idHand;
-
-                    $defausse = PilesController::newDefausse();
-                    $player->defausse = $defausse->idPile;
-
-                    
-                    if(TableRegistry::get('Players')->save($player)){
-                        GamesController::addPlayer($idGame, $player->idPlayer);
-                        //echo 'idPlayer : '.$player->idPlayer;
-
-
-                        $_SESSION['idPlayer'] = $player->idPlayer;
-                        $_SESSION['idHand'] = $idHand;
-                        $_SESSION['idGame'] = $idGame;
-
-
-
-                        $this->redirect(array("controller" => "Games", 
-                            "action" => "play",
-                            $idGame));
-                    }
-                    else{
-                        $this->Flash->error(__('Impossible de mettre à jour votre joueur.'));
-                    }
-                }
-                else{
-                    
-                    $_SESSION['idPlayer'] = $player->idPlayer;
-                    $_SESSION['idHand'] = $player->hand;
-                    $_SESSION['idGame'] = $idGame;
-                    
-                    
-                    
-                    //$this->Flash->error(__('Joueur déjà présent dans une partie.'));
-                    $this->redirect(array("controller" => "Games", 
-                            "action" => "play",
-                            $idGame));
-                }
-            }
-        }
     }
 }

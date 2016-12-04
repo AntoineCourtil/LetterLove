@@ -34,6 +34,7 @@ class PilesFixture extends TestFixture
         'card14' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'card15' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'card16' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'type' => ['type' => 'string', 'length' => 20, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_indexes' => [
             'pile_fk_card1' => ['type' => 'index', 'columns' => ['card1'], 'length' => []],
             'pile_fk_card2' => ['type' => 'index', 'columns' => ['card2'], 'length' => []],
@@ -101,7 +102,8 @@ class PilesFixture extends TestFixture
             'card13' => 1,
             'card14' => 1,
             'card15' => 1,
-            'card16' => 1
+            'card16' => 1,
+            'type' => 'Lorem ipsum dolor '
         ],
     ];
 }

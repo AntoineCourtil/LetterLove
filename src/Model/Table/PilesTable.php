@@ -111,6 +111,9 @@ class PilesTable extends Table
             ->integer('card16')
             ->allowEmpty('card16');
 
+        $validator
+            ->allowEmpty('type');
+
         return $validator;
     }
 }

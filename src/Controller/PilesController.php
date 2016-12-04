@@ -10,6 +10,11 @@ if (session_status() == PHP_SESSION_NONE) {
 class PilesController extends AppController
 {
 
+    
+    //------------------------------------------------------------------------------------
+    //                              INITIALISATION
+    //------------------------------------------------------------------------------------
+    
     public function initialize()
     {
         parent::initialize();
@@ -27,7 +32,50 @@ class PilesController extends AppController
         $this->set(compact('pile'));
     }
     
+    public function add()
+    {
+        $pile = $this->Piles->newEntity();
+        if ($this->request->is('post')) {
+            $pile = $this->Piles->patchEntity($pile, $this->request->data);
+            if ($this->Piles->save($pile)) {
+                $this->Flash->success(__('Votre Carte a été sauvegardé.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible d\'ajouter votre carte.'));
+        }
+        $this->set('pile', $pile);
+    }
     
+    public function edit($idPile = null)
+    {
+        $pile = $this->Piles->get($idPile);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Piles->patchEntity($pile, $this->request->data);
+            if ($this->Piles->save($pile)) {
+                $this->Flash->success(__('Votre carte a été mise à jour.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Impossible de mettre à jour votre carte.'));
+        }
+
+        $this->set('pile', $pile);
+    }
+    
+    public function delete($idPile)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $pile = $this->Piles->get($idPile);
+        if ($this->Piles->delete($pile)) {
+            $this->Flash->success(__("La carte avec l'id : {0} a été supprimée.", h($idPile)));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+    
+    
+    //------------------------------------------------------------------------------------
+    //                              PILES FUNCTIONS
+    //------------------------------------------------------------------------------------
     
     public static function listpile(){
         $idGame = $_SESSION['idGame'];
@@ -415,61 +463,6 @@ class PilesController extends AppController
         return 0;
     }
     
-    /*public static function getLastCard($idPile){
-        $pile = TableRegistry::get('Piles')->get($idPile);
-        
-        if($pile->get('card16')!=NULL){
-            return $pile->get('card16');
-        }
-        if($pile->get('card15')!=NULL){
-            return $pile->get('card15');
-        }
-        if($pile->get('card14')!=NULL){
-            return $pile->get('card14');
-        }
-        if($pile->get('card13')!=NULL){
-            return $pile->get('card13');
-        }
-        if($pile->get('card12')!=NULL){
-            return $pile->get('card12');
-        }
-        if($pile->get('card11')!=NULL){
-            return $pile->get('card11');
-        }
-        if($pile->get('card10')!=NULL){
-            return $pile->get('card10');
-        }
-        if($pile->get('card9')!=NULL){
-            return $pile->get('card9');
-        }
-        if($pile->get('card8')!=NULL){
-            return $pile->get('card8');
-        }
-        if($pile->get('card7')!=NULL){
-            return $pile->get('card7');
-        }
-        if($pile->get('card6')!=NULL){
-            return $pile->get('card6');
-        }
-        if($pile->get('card5')!=NULL){
-            return $pile->get('card5');
-        }
-        if($pile->get('card4')!=NULL){
-            return $pile->get('card4');
-        }
-        if($pile->get('card3')!=NULL){
-            return $pile->get('card3');
-        }
-        if($pile->get('card2')!=NULL){
-            return $pile->get('card2');
-        }
-        if($pile->get('card1')!=NULL){
-            return $pile->get('card1');
-        }
-        
-        return 0;
-    }*/
-    
     public static function count($idPile){
         $count=0;
         
@@ -525,45 +518,5 @@ class PilesController extends AppController
         }
         
         return $count;
-    }
-    
-    public function add()
-    {
-        $pile = $this->Piles->newEntity();
-        if ($this->request->is('post')) {
-            $pile = $this->Piles->patchEntity($pile, $this->request->data);
-            if ($this->Piles->save($pile)) {
-                $this->Flash->success(__('Votre Carte a été sauvegardé.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Impossible d\'ajouter votre carte.'));
-        }
-        $this->set('pile', $pile);
-    }
-    
-    public function edit($idPile = null)
-    {
-        $pile = $this->Piles->get($idPile);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Piles->patchEntity($pile, $this->request->data);
-            if ($this->Piles->save($pile)) {
-                $this->Flash->success(__('Votre carte a été mise à jour.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Impossible de mettre à jour votre carte.'));
-        }
-
-        $this->set('pile', $pile);
-    }
-    
-    public function delete($idPile)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $pile = $this->Piles->get($idPile);
-        if ($this->Piles->delete($pile)) {
-            $this->Flash->success(__("La carte avec l'id : {0} a été supprimée.", h($idPile)));
-            return $this->redirect(['action' => 'index']);
-        }
     }
 }
